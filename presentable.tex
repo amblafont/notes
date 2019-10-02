@@ -49,26 +49,69 @@ need to know what it is at this stage) for some
 regular cardinal $\lambda$. This a notion of $\lambda$-presentable category, and
 a presentable categories is a $\lambda$-presentable category, for some regular
 cardinal $\lambda$. Any $\lambda$-presentable category is also $\mu$-presentable
-for any regular cardinal $\mu>\lambda$ (this is not the case for accessible categories!).
+for any regular cardinal $\mu>\lambda$. This is not the case for accessible
+categories! We only know, for them, that given any regular cardinal $\lambda$,
+there exists $\kappa>\lambda$ such that any $\lambda$-accessible category is
+also $\kappa$-accessible \cite[Theorem 2.11]{adamek_rosicky} (such a condition
+is noted $\lambda \triangleleft \kappa$ and $\lambda$ is said sharply smaller,
+and it is transitive).
+In particular, $\omega\triangleleft \lambda$ for any (infinite) regular cardinal
+$\lambda$, and a regular cardinal is always sharply smaller than its successor.
+For each set of regular cardinals, there is one which is sharply greater than
+all of them. A similar thing can be said of accessible functors.
 
 
 Presentable categories satisfy nice properties.
 
 \begin{definition}
- A functor is said \textbf{accessible}  if it is \textbf{$\lambda$-accessible}
+ A functor is said \textbf{to have a rank}  if it has a rank $\lambda$,
  for some regular cardinal $\lambda$, that is, if it
   preserves $\lambda$-directed colimits.
+  A functor is said ($\lambda$-)\textbf{accessible} if it has a rank ($\lambda$) and the domain/codomain
+  are ($\lambda$-)accessible.
 \end{definition}
 \begin{theorem}
   \cite[1.66]{adamek_rosicky}
   A functor between presentable categories is right adjoint iff it is continuous
-  and accessible.
+  and has a rank.
   \end{theorem}
-  A similar statement is true of left adjointness, according to nlab.
+  A similar version is true of left adjointness according to nlab (wihtout the
+  accessibility condition because it is automatically satisfied).
   \begin{theorem}[nlab]
    Let $T$  be an accessible monad on a presentable category $C$.
    Then $C^T$ is presentable.
   \end{theorem}
+  % Indeed, the right adjoint of a monadic adjunction
+
+\section{Regular cardinals}
+\begin{definition}
+ A cardinal is regular if it is strictly greater than any smaller union of smaller cardinals.
+\end{definition}
+Any successor cardinal is regular. The existence of regular uncountable limit
+cardinal (called weakly inacessible cardinal) is not known to be consistent with
+ZFC. It is consistent to assume that any uncountable limit cardinal is not regular.
+
+\section{Filtered/directed colimits}
+A $\lambda$-filtered category is a category $\CC$ in which any diagram
+$\DD\to\CC$ with $\DD$ $\lambda$-small has a cocone. A $\lambda$-directed
+category is a poset which induces a $\lambda$-filtered category.
+
+For any $\lambda$-filtered category $\CC$, there is a $\lambda$-directed one
+$\DD$ with a cofinal functor $\DD\to\CC$. The existence of a cofinal functor
+means that colimits with respect to $\CC$ is the same as colimits with respect
+to $\DD$.
+
+That is why we can restrict ourselves to $\lambda$-directed colimits, rather
+than the more general $\lambda$-filtered colimits. We can also restrict to
+chains for $\omega$-filtered colimits, although there is no cofinality argument
+(see~\cite[Example 1.8]{adamek_rosicky}).
+% Also, we have this wonderful theorem:
+\begin{theorem}
+ \cite[Corollary 1.7]{adamek_rosicky}:
+ A category has $\omega$-filtered (or $\omega$-directed) colimits iff it has
+ colimits of chains. For such categories $K$, a functor of domain $K$ preserve
+ $\omega$-filtered colimits iff it preserves colimits of chains.
+\end{theorem}
 
   \section{Presentable categories}
   Let $\lambda$ be a regular cardinal. A $\lambda$-presentable category is a
@@ -81,6 +124,37 @@ Presentable categories satisfy nice properties.
   categories and $\lambda$-cocontinous functors (i.e., functors preserving any
   $\lambda$-small colimit, not only the directed ones).
 
+  \begin{definition}
+    A \textbf{$\lambda$-presentable object} in a category $C$ is an object such
+    that its coyoneda embedding preserves $\lambda$-directed colimits.
+  \end{definition}
+  It says no more that any morphism from such an object to a $\lambda$-directed
+  colimit factors (essentially uniquely) through some object of the colimiting cocone.
+
+  Note that for accessible categories, we have a similar statement
+  \cite[2.26]{adamek_rosicky} where the adjunction happens between the category
+  of $\lambda$-directed cocomplete categories and the usual category of categories.
+  \begin{question}
+   Can you show with these characterizations that a presentable category is
+   accesible? 
+  \end{question}
+  Note that a $\lambda$-accessible category is defined as a category closed
+  under $\lambda$-directed colimit and there is a small set of
+  $\lambda$-presentable objects such that every object is a $\lambda$-directed
+  colimit of objects of $A$.
+  \begin{question}
+    How do you show the previous characterization of accessible categories?
+\end{question}
+\subsection{Cauchy completion}
+(let us recall that the free split idempotency is called cauchy completion and
+gives a criterion to compare presheaf categories)
+\begin{theorem}
+  \cite[2.4]{adamek_rosicky}
+ Each accessible category has split idempotents. 
+\end{theorem}
+\begin{theorem}
+ Every small category with split idempotents is accessible. 
+\end{theorem}
 \section{Finitely presentable categories}
 Any presheaf category is finitely presentable \cite{adamek_rosicky}: the
 representable functors form the strong generator, and thus the presentable
@@ -88,6 +162,9 @@ objects are the finite limits of these representable functors.
 
 \section{Gabriel-Ulmer}
 This section is based on Exercise 1.s and Remark 1.46 of \cite{adamek_rosicky}.
+\begin{definition}
+  
+\end{definition}
 
 \begin{theorem}
   For each regular cardinal $\lambda$, we denote
@@ -147,12 +224,18 @@ some cardinal bound over the size of the diagrams?
  A  category is $\lambda$-accessible iff it is equivalent to a full subcategory
  of a presheaf category closed under $\lambda$-filtered colimits.
 \end{theorem}
+\begin{question}
+  How does the raising of the indexing regular cardinal translates into this definition?
+\end{question}
 \begin{theorem}
  A category is if it is equivalent to a reflective subcategory
  of a presheaf category.
 \end{theorem}
-Note that a $\lambda$-accessible category is a $\lambda$-presentable
-in case the embedding into the presheaf category has a left adjoint.
+Note that a accessible category is presentable
+precisely if the embedding into the presheaf category has a left adjoint, indeed:
+\begin{theorem}\cite[Proposition 2.4.8]{accessible} or \cite[2.23]{adamek_rosicky}
+  Any right adjoint functor between accessible categories is accessible.
+\end{theorem}
 % Hence, for presentable category, we get a left adjoint to the embedding into the
 % category of presheaf
 \begin{theorem}
@@ -227,6 +310,7 @@ Con$ (this is the idea of translating GATs into EATS, as in \cite{CARTMELL}).
 \begin{question}
   Maybe this generalizes to HIITs and HITs?
 \end{question}
+\section{Equational systems?}
 \bibliographystyle{unsrt}
 \bibliography{bibli}
 \end{document}
