@@ -116,16 +116,39 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
 \end{theorem}
 
   \section{Presentable categories}
-  Let $\lambda$ be a regular cardinal. A $\lambda$-presentable category is a
+  Let $\lambda$ be a regular cardinal.
+  \begin{definition}
+  A $\lambda$-presentable category is a
   category $C$ which is a free $\lambda$-cocompletion
   $\Cont\lambda(\Pres\lambda(C))$ of
-  some full subcategory $\Pres\lambda(C)$ of \emph{$\lambda$-presentable
+  some small full subcategory $\Pres\lambda(C)$ of \emph{$\lambda$-presentable
     objects} \cite[Representation theorem 1.46]{adamek_rosicky}.
+  \end{definition}
 
   Here, by free $\lambda$-cocompletion, we think informally of an adjunction between
   cocomplete (not $\lambda$-cocomplete!) categories and the category of
   categories and $\lambda$-cocontinous functors (i.e., functors preserving any
   $\lambda$-small colimit, not only the directed ones).
+
+  Compare with the characterization of $\lambda$-accessible category:
+  \begin{definition}
+  A $\lambda$-accessible category is a cocompletion of some small full subcategory with respect to $\lambda$-directed colimits
+  \cite[Representation theorem 2.26]{adamek_rosicky}. 
+  % Equivalently, it is a category which is equivalent to a subcategory of
+  % functors from some small category $\CC$ to $\Set$ preserving
+  % colimits and $\lambda$-small limits.
+  \end{definition}
+  Here, we think of an
+  adjunction between categories and categories with $\lambda$-directed colimits
+  and functors preserving them.
+  \begin{question}
+   Is it clear that a $\lambda$-presentable category is $\lambda$-accessible
+   with these characterizations? Not really...
+  \end{question}
+  Alternative and (not)
+  \begin{definition}
+    
+  \end{definition}
 
   \begin{definition}
     A \textbf{$\lambda$-presentable object} in a category $C$ is an object such
