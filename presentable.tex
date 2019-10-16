@@ -11,6 +11,8 @@
 \title{A note on (locally) presentable categories}
 \author{Ambroise LAFONT}
 
+\newcommand{\CC}{\mathsf{C}}
+\newcommand{\DD}{\mathsf{D}}
 \newcommand{\Cont}[1]{\text{Cont}_{#1}}
 \newcommand{\Pres}[1]{\text{Pres}_{#1}}
 \newcommand{\CwF}{\text{CwF}}
@@ -93,7 +95,7 @@ ZFC. It is consistent to assume that any uncountable limit cardinal is not regul
 
 \section{Filtered/directed colimits}
 A $\lambda$-filtered category is a category $\CC$ in which any diagram
-$\DD\to\CC$ with $\DD$ $\lambda$-small has a cocone. A $\lambda$-directed
+$\DD\to \CC$ with $\DD$ $\lambda$-small has a cocone. A $\lambda$-directed
 category is a poset which induces a $\lambda$-filtered category.
 
 For any $\lambda$-filtered category $\CC$, there is a $\lambda$-directed one
@@ -117,7 +119,8 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
   Let $\lambda$ be a regular cardinal. A $\lambda$-presentable category is a
   category $C$ which is a free $\lambda$-cocompletion
   $\Cont\lambda(\Pres\lambda(C))$ of
-  some full subcategory $\Pres\lambda(C)$ of \emph{$\lambda$-presentable objects}.
+  some full subcategory $\Pres\lambda(C)$ of \emph{$\lambda$-presentable
+    objects} \cite[Representation theorem 1.46]{adamek_rosicky}.
 
   Here, by free $\lambda$-cocompletion, we think informally of an adjunction between
   cocomplete (not $\lambda$-cocomplete!) categories and the category of
@@ -158,7 +161,7 @@ gives a criterion to compare presheaf categories)
 \section{Finitely presentable categories}
 Any presheaf category is finitely presentable \cite{adamek_rosicky}: the
 representable functors form the strong generator, and thus the presentable
-objects are the finite limits of these representable functors.
+objects are the finite colimits of these representable functors.
 
 \section{Gabriel-Ulmer}
 This section is based on Exercise 1.s and Remark 1.46 of \cite{adamek_rosicky}.
