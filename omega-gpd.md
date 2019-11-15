@@ -38,12 +38,14 @@ as pullbacks).
 For this, it is enough that the strictification transformation
 W → S is cartesian, i.e. for any globular set X,
 
+```
 W(X) ----> S(X)
   |         |
   |         |
   |         |
   V         V
 W(1) ----> S(1)
+```
 
 is a pullback.
 
