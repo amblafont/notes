@@ -1,9 +1,9 @@
-W : monad of weak omega groupoids on globular sets
-S : monad of strict omega groupoids on globular sets
+- W : monad of weak omega groupoids on globular sets
+- S : monad of strict omega groupoids on globular sets
 
-W is a monad with arities in Θ
-W preserves monomorphisms
-W preserves coproducts
+- W is a monad with arities in Θ
+- W preserves monomorphisms
+- W preserves coproducts
 
 
 ## Operations
