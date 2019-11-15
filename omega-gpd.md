@@ -53,7 +53,7 @@ I don't think W is familial.
 
 ## Strictification
 
-We believe there is a strictification functor F : W → S
+We believe there is a strictification functor F : W → S.
 But then, consider the coherence x,y:⋆, f,g : x=y, α:f=g  ⊢ coh : x=y
 How is this coherence cell strictified? It seems we have to make an arbitrary
 choice between f and g.
