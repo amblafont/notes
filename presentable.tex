@@ -156,7 +156,9 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
   \end{definition}
   It says no more that any morphism from such an object to a $\lambda$-directed
   colimit factors (essentially uniquely) through some object of the colimiting cocone.
-
+  \begin{lemma}
+   A $\lambda$-presentable object is also $\kappa$-presentable, for $\kappa > \lambda$.
+  \end{lemma}
   Note that for accessible categories, we have a similar statement
   \cite[2.26]{adamek_rosicky} where the adjunction happens between the category
   of $\lambda$-directed cocomplete categories and the usual category of categories.
@@ -164,13 +166,30 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
    Can you show with these characterizations that a presentable category is
    accesible? 
   \end{question}
-  Note that a $\lambda$-accessible category is defined as a category closed
+  \begin{definition}[Alternative definition]
+  A $\lambda$-accessible category is defined as a category closed
   under $\lambda$-directed colimit and there is a small set of
   $\lambda$-presentable objects such that every object is a $\lambda$-directed
   colimit of objects of $A$.
-  \begin{question}
+  \end{definition}
+  \begin{definition}[Another def \cite[1.20]{adamek_rosicky}]
+    A locally $\lambda$-presentable category is a cocomplete category
+    with a strong generator formed of $\lambda$-presentable objects.
+  \end{definition}
+  To go from the strong generator to the set of $\lambda$-presentable objects
+  above: take $\lambda$-small colimits of objects in the strong generator.
+  \begin{definition}
     How do you show the previous characterization of accessible categories?
 \end{question}
+\begin{lemma}
+   A locally $\lambda$-presentable category is also locally $\kappa$-presentable, for $\kappa > \lambda$.
+\end{lemma}
+\begin{proof}
+  We consider the alternative definition of locally presentable category.
+  The set of ''presenting'' $\mu$-presentable objects is induced by noticing that
+  $\lambda$-presentable objects are also $\kappa$-presentable, and form a strong
+  generator. Then, we take $\mu$-small colimits of them.
+\end{proof}
 \subsection{Cauchy completion}
 (let us recall that the free split idempotency is called cauchy completion and
 gives a criterion to compare presheaf categories)
