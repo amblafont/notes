@@ -3,6 +3,7 @@
 \usepackage{proof}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage{pdflscape}
 \usepackage{multirow,bigdelim}
@@ -26,6 +27,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{conjecture}[theorem]{Conjecture}
 \newtheorem{question}[theorem]{Question}
+\newtheorem{lemma}{Lemma}
 \begin{document}
 \maketitle
 % This is a report of my visit to Ambrus Kaposi in Budapest from 26th August to
@@ -172,13 +174,14 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
   $\lambda$-presentable objects such that every object is a $\lambda$-directed
   colimit of objects of $A$.
   \end{definition}
-  \begin{definition}[Another def \cite[1.20]{adamek_rosicky}]
+  \begin{definition}
+	  (Another def \cite[1.20]{adamek_rosicky})
     A locally $\lambda$-presentable category is a cocomplete category
     with a strong generator formed of $\lambda$-presentable objects.
   \end{definition}
   To go from the strong generator to the set of $\lambda$-presentable objects
   above: take $\lambda$-small colimits of objects in the strong generator.
-  \begin{definition}
+  \begin{question}
     How do you show the previous characterization of accessible categories?
 \end{question}
 \begin{lemma}
