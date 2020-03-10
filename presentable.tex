@@ -123,8 +123,9 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
   A $\lambda$-presentable category is a
   category $C$ which is a free $\lambda$-cocompletion
   $\Cont\lambda(\Pres\lambda(C))$ of
-  some small full subcategory $\Pres\lambda(C)$ of \emph{$\lambda$-presentable
-    objects} \cite[Representation theorem 1.46]{adamek_rosicky}.
+  some small full subcategory $\Pres\lambda(C)$
+     \cite[Representation theorem 1.46]{adamek_rosicky}..
+	  Then, $\Pres\lambda(C)$ consist of \emph{$\lambda$-presentableobjects}
   \end{definition}
 
   Here, by free $\lambda$-cocompletion, we think informally of an adjunction between
@@ -161,6 +162,9 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
   \begin{lemma}
    A $\lambda$-presentable object is also $\kappa$-presentable, for $\kappa > \lambda$.
   \end{lemma}
+  \begin{proof}
+	  Obvious, because a $\kappa$-filtered category is also $\lambda$-filtered.
+  \end{proof}
   Note that for accessible categories, we have a similar statement
   \cite[2.26]{adamek_rosicky} where the adjunction happens between the category
   of $\lambda$-directed cocomplete categories and the usual category of categories.
@@ -189,9 +193,9 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
 \end{lemma}
 \begin{proof}
   We consider the alternative definition of locally presentable category.
-  The set of ''presenting'' $\mu$-presentable objects is induced by noticing that
+  The set of ''presenting'' $\kappa$-presentable objects is induced by noticing that
   $\lambda$-presentable objects are also $\kappa$-presentable, and form a strong
-  generator. Then, we take $\mu$-small colimits of them.
+  generator. Then, we take $\kappa$-small colimits of them.
 \end{proof}
 \subsection{Cauchy completion}
 (let us recall that the free split idempotency is called cauchy completion and
