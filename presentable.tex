@@ -27,6 +27,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{conjecture}[theorem]{Conjecture}
 \newtheorem{question}[theorem]{Question}
+\newtheorem{remark}[theorem]{Remark}
 \newtheorem{lemma}{Lemma}
 \begin{document}
 \maketitle
@@ -81,6 +82,14 @@ Presentable categories satisfy nice properties.
   \end{theorem}
   A similar version is true of left adjointness according to nlab (wihtout the
   accessibility condition because it is automatically satisfied).
+  In fact, by looking at the proof of \cite[Representation theorem 1.45]{adamek_rosicky}, it seems that any cocontinous functor out of a presentable category
+  has a right adjoint (because any presentable category is of the shape $\Cont\lambda(A)$, and in the proof mentioned above, they say that the cocontinuous induced functor to a cocomplete category has a left adjoint obtained easily using yoneda. I suspect cocompleteness of the target is not necessary here).
+
+  \begin{remark}
+	  Anticipating the fact that any presentable category is of the shape $\Cont\lambda(A)$,
+	  a right adjoint to a presentable categorie is always a (kind of) nerve functor. This is seen, by postcomposing with the right adjoint inclusion in $\hat{A}$, and using yoneda to get the definition of this right adjoint.
+  \end{remark}
+
   \begin{theorem}[nlab]
    Let $T$  be an accessible monad on a presentable category $C$.
    Then $C^T$ is presentable.
@@ -133,7 +142,15 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
   cocomplete (not $\lambda$-cocomplete!) categories and go to the category of
   categories and $\lambda$-cocontinous functors (i.e., functors preserving any
   $\lambda$-small colimit, not only the directed ones).
-  The free stuff is obtained by restricting the category of presheaves to those preserving $\lambda$-small limits.
+  \begin{remark}
+	  $\Cont\lambda$ is 
+	  obtained by restricting the category of presheaves to those preserving $\lambda$-small limits (as the yonedas do). Beware that colimits do not compute as in the total presheaf category (I can't find an argument for its cocompleteness in \cite{adamek_rosicky} by the way).
+	  Is any functor still a canonical colimit of yonedas in $\Cont\lambda$?
+	  The induced cocomplete functor is obtained by restricting the universal functor from $\hat{A}$ (because of the universal property of $\hat{A}$. Note: we get a cocomplete functor  from 
+	  $\hat{A}$ to $\Cont\lambda$ by universal property of $\hat{A}$ .
+	  This is obviously the left adjoint to the inclusion functor
+	  (indeed, any cocontinuous functor out of $\hat{A}$ has a left adjoint, using yoneda to get the value of it)
+  \end{remark}
 
   Compare with the characterization of $\lambda$-accessible category:
   \begin{definition}
@@ -291,6 +308,7 @@ precisely if the embedding into the presheaf category has a left adjoint, indeed
 \begin{theorem}\cite[Proposition 2.4.8]{accessible} or \cite[2.23]{adamek_rosicky}
   Any right adjoint functor between accessible categories is accessible.
 \end{theorem}
+
 % Hence, for presentable category, we get a left adjoint to the embedding into the
 % category of presheaf
 \begin{theorem}
