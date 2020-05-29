@@ -11,30 +11,44 @@
 \usepackage{multicol}
 \title{A note on (locally) presentable categories}
 \author{Ambroise LAFONT}
+\usepackage{tikz-cd}
+\usepackage[all]{xy}
 
 \newcommand{\CC}{\mathsf{C}}
 \newcommand{\DD}{\mathsf{D}}
 \newcommand{\Cont}[1]{\text{Cont}_{#1}}
+\newcommand{\Dir}[1]{\text{Dir}_{#1}}
 \newcommand{\Pres}[1]{\text{Pres}_{#1}}
 \newcommand{\CwF}{\text{CwF}}
+\newcommand{\Lan}{\text{Lan}}
 \newcommand{\T}{\mathcal{T}}
 \newcommand{\U}{\mathcal{U}}
 \newcommand{\id}{\text{id}}
 \newcommand{\Set}{\text{Set}}
 \newcommand{\im}{\text{Im }}
 \newcommand{\bool}{\text{bool}}
+\newcommand{\colim}{\mathsf{colim}}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{question}[theorem]{Question}
 \newtheorem{remark}[theorem]{Remark}
-\newtheorem{lemma}{Lemma}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
 \begin{document}
 \maketitle
 % This is a report of my visit to Ambrus Kaposi in Budapest from 26th August to
 % 30th August 2019, and various thoughts
 
 \tableofcontents
+
+In this document, conjectures are statements that I believe are true, although I did not
+have checked them or find a proper reference for them.
+The proofs of \cite{adamek_rosicky} are here reformulated, sometimes using (co)ends
+(see~\cite{coend} for a demonstration of their usefulness).
 
 A \emph{locally presentable category} (or just \emph{presentable} category) is a
 category which is not too big and not too small: it is cocomplete, but is the
@@ -68,21 +82,23 @@ all of them. A similar thing can be said of accessible functors.
 
 Presentable categories satisfy nice properties.
 
-\begin{definition}
- A functor is said \textbf{to have a rank}  if it has a rank $\lambda$,
- for some regular cardinal $\lambda$, that is, if it
-  preserves $\lambda$-directed colimits.
-  A functor is said ($\lambda$-)\textbf{accessible} if it has a rank ($\lambda$) and the domain/codomain
-  are ($\lambda$-)accessible.
-\end{definition}
+% \begin{definition}
+%  A functor is said \textbf{to have a rank}  if it has a rank $\lambda$,
+%  for some regular cardinal $\lambda$, that is, if it
+%   preserves $\lambda$-directed colimits.
+%   A functor is said ($\lambda$-)\textbf{accessible} if it has a rank ($\lambda$) and the domain/codomain
+%   are ($\lambda$-)accessible.
+% \end{definition}
 \begin{theorem}
   \cite[1.66]{adamek_rosicky}
   A functor between presentable categories is right adjoint iff it is continuous
-  and has a rank.
+  and preserve $\lambda$-directed colimits for some regular cardinal $\lambda$.
   \end{theorem}
   A similar version is true of left adjointness according to nlab (wihtout the
   accessibility condition because it is automatically satisfied).
-  In fact, by looking at the proof of \cite[Representation theorem 1.45]{adamek_rosicky}, it seems that any cocontinous functor out of a presentable category
+  In fact, by looking at the proof of \cite[Representation theorem
+  1.45]{adamek_rosicky}, it seems that any cocontinous functor out of a
+  presentable category and to a copowered category
   has a right adjoint (because any presentable category is of the shape $\Cont\lambda(A)$, and in the proof mentioned above, they say that the cocontinuous induced functor to a cocomplete category has a left adjoint obtained easily using yoneda. I suspect cocompleteness of the target is not necessary here).
 
   \begin{remark}
@@ -91,7 +107,7 @@ Presentable categories satisfy nice properties.
   \end{remark}
 
   \begin{theorem}[nlab]
-   Let $T$  be an accessible monad on a presentable category $C$.
+   Let $T$  be a monad preserving $\lambda$-directed colimits on a presentable category $C$.
    Then $C^T$ is presentable.
   \end{theorem}
   % Indeed, the right adjoint of a monadic adjunction
@@ -101,7 +117,7 @@ Presentable categories satisfy nice properties.
  A cardinal is regular if it is strictly greater than any smaller union of smaller cardinals.
 \end{definition}
 Any successor cardinal is regular. The existence of regular uncountable limit
-cardinal (called weakly inacessible cardinal) is not known to be consistent with
+cardinal (called weakly inaccessible cardinal) is not known to be consistent with
 ZFC. It is consistent to assume that any uncountable limit cardinal is not regular.
 
 \section{Filtered/directed colimits}
@@ -126,14 +142,1319 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
  $\omega$-filtered colimits iff it preserves colimits of chains.
 \end{theorem}
 
-  \section{Presentable categories}
+
+\section{Preliminaries}
+By reading \cite{commutationlim} dating back from 2014, it seems that few is
+known about the commutation of limits and colimits in $\Set$, except for
+particular shapes.
+
+\begin{notation}
+  Given a presheaf $F : A \rightarrow \Set$,
+  we denote $\int F$  or $\oint^{a:A} F(a)$
+  (following \cite{coend})
+  the category of elements of $F$.
+\end{notation}
+\begin{notation}
+  We denote the limit of a functor $F:A\rightarrow B$ by $\lim F = \int_{a:A}F(a)$.
+  We denote the colimit of a functor $F:A\rightarrow B$ by $\colim F = \int^{a:A}F(a)$.
+\end{notation}
+\begin{notation}
+  The opposite of category $A$ is denoted by $A^o$.
+\end{notation}
+\begin{definition}
+  A \textbf{presheaf} is a functor $A \rightarrow \Set$, where $A$ is a small
+  category.
+  We denote the category of presheaves $A^o \rightarrow \Set $ by $\hat{A}$.
+\end{definition}
+
+\section{Recap on coends}
+See \cite{coend} for a compelling view on the usefulness of coends.
+Here are some results (some well-known, some less).
+\begin{lemma}
+ $[C,D](F,G)\simeq \int_c D(F(c),G(c))$.
+\end{lemma}
+\begin{proposition}[Weighted colimits reduce to conical colimits]
+\label{p:weighted-colims}
+  Let $W : C^o \rightarrow \Set$ and $F : C\rightarrow D$ be functors, where $D$ has copowers and
+  $C$ is small.
+  The weighted colimit $\int^c W(c)\times F(c)$ computes as the conical colimit
+  $\int^{(c,x):\int W} F(c)$.
+\end{proposition}
+\begin{corollary}
+\label{cor:weighted-colims}
+  Here is a list of easy consequences of Proposition~\ref{p:weighted-colims}
+  \begin{enumerate}
+  \item The weighted limit $\int^c  F(c)^{W(c)}$ computes as the conical colimit
+    $\int_{(c,x):\int W} F(c)$.
+  \item (coyoneda lemma)
+    $\int^c F(c)\times C(c,c')\simeq F(c')$
+  \item (yoneda lemma)
+    $\int_c F(c)^{C(c',c)}\simeq F(c')$
+  \item (coends as colimits) for any functor $H:C\times C^o \rightarrow D$,
+      denoting by $y:C \times C^o \rightarrow \Set$ the yoneda bifunctor, we
+      have $\int^c H(c,c) \simeq \int^{(c_1\xrightarrow{f}{}c_2):\int y} H(c_1, c_2)$.
+      \label{it-coend-colims}
+  \item (coend as limits) (the dual of the previous item)
+  \end{enumerate}
+\end{corollary}
+\begin{proof}
+  The first statement comes from duality. The yoneda lemma is the dual of the
+  coyoneda lemma.
+  The coyoneda lemma comes from the fact that $\int C(-,c') = C/c'$. Thus,
+  \[
+    \int^c F(c)\times C(c,c')
+    \simeq 
+    \int^{(c\rightarrow c'):C/c'} F(c)
+  \]
+  Thus, this is a colimit over $C/c'$. But $id_{c'}$ is terminal in $C/c'$, so the
+  colimit is trivial and results in $F(c')$.
+
+  For coends as colimits, start from the right hand side:
+  \begin{align*}
+    \int^{(c_1\xrightarrow{f}{}c_2):\int y} H(c_1, c_2)
+    & \simeq
+    \int^{c_1,c_2} H(c_1, c_2)\times C(c_2,c_1)
+      \text{\quad by Proposition~\ref{p:weighted-colims}.}
+      \\
+    & \simeq
+      \int^{c_1} H(c_1, c_1)
+      \text{\quad by the coyoneda lemma.}
+    \end{align*}
+\end{proof}
+
+Thus, the elimination of weighted colimits (Proposition~\ref{p:weighted-colims}) can be seen as a generalization
+of the yoneda lemma.
+Interestingly, we can also deduce Proposition~\ref{p:weighted-colims} from
+the (co)yoneda lemma and the computation of coends as colimits
+(item~\ref{it-coend-colims} in the corollary above): see Lemma~\ref{l:weighted-colims}.
+
+
+% \begin{lemma}
+%   In a distributive complete/cocomplete category (when products commute with colimits),
+%   a canonical morphism
+%   \[
+% \int^{c} \int_{d:D} \sum_{i:I} M_i(c,d) \rightarrow
+% \int_d\int^c  \sum_i M_i(c,d) 
+%   \]
+%   is canonically isomorphic
+%   to 
+%   \[
+%     \sum_{i : \pi_0(D)\rightarrow I}\int^c \int_d M_{i_d}(c,d) \rightarrow
+%     \sum_{i : \pi_0(D)\rightarrow I}\int_d\int^c   M_{i_d}(c,d) 
+%   \]
+% \end{lemma}
+% \begin{proof}
+%  It comes from the fact that the canonical morphism $\sum_{i\in I}\int_d
+%  \rightarrow
+%  \sum_{i : \pi_0(D)\rightarrow I}\int_d $  is an isomorphism.
+
+%  More precisely, $\int_d = \prod_{x\in \pi_0(D)}\int_{d:D_x}$, where $D_x$
+%  denotes the subcategory of $D$ corresponding to the connected component $x$.
+% \end{proof}
+\begin{notation}
+  \label{n:colim-twisted}
+ If $F : \int y \rightarrow \Set$, with $y: C\times C^o \rightarrow \Set$, we
+ denote its colimit by $\int^c F(c,c,id_c)$, sometimes even omitting $id_c$ in the expression.
+ Thanks to item~\ref{it-coend-colims} of Corollary~\ref{cor:weighted-colims},
+ it is consistent with the coend notation
+ $\int^c G(c,c)$ because in such $G$ induces by precomposition a functor
+ $G':\int y \rightarrow \Set$ and then $\int^c G'(c) = \int^c G(c,c)$.
+ \textcolor{red}{Faire une theorie generale des cofins fondees sur cette notation}
+\end{notation}
+\begin{lemma}
+  \label{l:colim-colim}
+  Let $F: C\times C^o \rightarrow Cat$ be a functor to small categories with $C$ small and
+  $J:\int^{c}F(c,c)\rightarrow D$. Then
+  \[
+    \int^{(c;a): \int^c F(c,c)} J(c;a) \simeq
+    \int^{(c_1 \xrightarrow{f}{} c_2): \int y} \int^{a: F(c_1,c_2)} J(c_1;f(a)).
+  \] 
+\end{lemma}
+\begin{remark}
+  With notation~\ref{n:colim-twisted}, this becomes
+  \[
+    \int^{(c;a): \int^c A(c,c)} J(c;a) \simeq
+    \int^c \int^{a: A(c,c)} J(c;a)
+  \] 
+  Furthermore, by duality,
+  \[
+    \int_{(c;a): \int^c A(c,c)} J(c;a) \simeq
+    \int_c \int_{a: A(c,c)} J(c;a)
+  \] 
+\end{remark}
+\begin{proof}[Proof of Lemma~\ref{l:colim-colim}]
+  It relies on the fact (TODO: check) that $[\int^c A(c,c), D]$ is isomorphic to
+  $\int_c[A(c,c),D]$.
+\end{proof}
+\begin{lemma}
+  \label{l:compute-grothendieck}
+  Let $F:A \rightarrow \Set$  be a presheaf. Then
+  \[
+    \oint^a F(a) \simeq \int^a F(a)\times a/A
+  \]
+\end{lemma}
+\begin{proof}
+  It comes from the coyoneda lemma, the fact that $a/A = \oint^{a'} A(a,a')$ and colimits
+  commute with the Grothendieck construction.
+\end{proof}
+\begin{lemma}
+  \label{l:colim-on-elements}
+  Let $F : C\rightarrow \Set$ a presheaf and $J:\int F \rightarrow D$ a functor,
+  where $D$ has some suitable properties.
+  Then,
+  \[
+    \int^{(c,x): \int F}  J(c,x)\simeq
+    \int^{(c_1\xrightarrow{f} c_2):  \int y}
+    \sum_{x\in F(c_1)}
+    J(c_2,
+    f (x))
+  \] 
+\end{lemma}
+\begin{remark}
+  With notation~\ref{n:colim-twisted}, this becomes
+  \[
+    \int^{(c,x): \int F}  J(c,x)\simeq
+    \int^{c}
+    \sum_{x\in F(c)}
+    J(c, x)
+  \] 
+  Furthermore, by duality,
+  \[
+    \int_{(c,x): \int F}  J(c,x)\simeq
+    \int_{c}
+    \prod_{x\in F(c)}
+    J(c, x)
+  \] 
+  \textcolor{red}{TODO: generalise to arbitrary coends (seems necessary in Lemma~\ref{l:gen-lim-dep-pairs})}
+\end{remark}
+\begin{proof}[Proof of Lemma~\ref{l:colim-on-elements}]
+  Let $F : C \rightarrow \Set$. Then (remember that the Grothendieck
+  construction preserves colimits):
+  \begin{align*}
+    \int F = \oint^c F(c) &
+                            \simeq
+                             \int^c F(c)\times c/A
+                            \text{\quad by Lemma~\ref{l:compute-grothendieck}}
+                            \end{align*}
+%                             \\ & \simeq
+
+%     \\ & \simeq
+%                             \simeq  
+%                             \oint^c \int^{c'} F(c')\times C(c',c) 
+%                             \text{\quad by coyoneda}
+%     % \int^{c_1,c_2} C(c_1,c_2)\times F(c_1) \times \oint^c C(c_2, c)
+%     \\ & \simeq
+%          \oint^c \int^{(c_1\xrightarrow{f} c_2):  \int y} F(c_2) \times  C(c_1,c)
+%          \text{\quad by Lemma~\ref{l:comp-coend}}
+%     \\
+%     & \simeq \int^{(c_1\xrightarrow{f} c_2):  \int y} F(c_2) \times \oint^c C(c_1,c)
+%     \text{\quad as $\oint^c$ commutes with $\int^d$}
+%     \\
+% & \simeq \int^{(c_1\xrightarrow{f} c_2):  \int y} F(c_2) \times c_1/C
+%   \end{align*}
+  Then, by Lemma~\ref{l:colim-colim},
+  \begin{align*}
+    \int^{(c,x): \int F}  J(c,x)
+    & \simeq
+    \int^{(c_1\xrightarrow{f}{} c_2):  \int y}
+\int^{(x,c_2 \xrightarrow{u}{} c):F(c_2) \times  c_1/C}
+    J(c, u(f(x)))
+    \\
+    &
+      \simeq
+      \int^{(c_1\xrightarrow{f}{} c_2):  \int y}
+      \sum_{x\in F(c_2)}
+      \int^{(c_1 \xrightarrow{u}{} c):   c_1/C}
+      J(c, u(f(x)))
+  \end{align*}
+  But note that $id_{c_1}$ is initial in $c_1/C$. Therefore, for any $K:(c_1/C)^o\rightarrow
+  D$, we have that $\colim K\simeq K(id_{c_1})$. This concludes the
+  argument.
+\end{proof}
+\begin{lemma}[Weighted colimits reduce to conical colimits]
+\label{l:weighted-colims}
+  Here, we state Proposition~\label{p:weighted-colims} and prove it from two of
+  its corollaries: the yoneda lemma, and the computation of coends as colimits
+  (item~\ref{it-coend-colims} of Propostion~\ref{cor:weighted-colims}).
+  \textcolor{red}{TODO: check that the proof does not secretly relies on the conclusion.}
+  
+  Let $W : C^o \rightarrow \Set$ and $F : C\rightarrow D$ be functors, where $D$ has copowers and
+  $C$ is small.
+  The weighted colimit $\int^c W(c)\times F(c)$ computes as the conical colimit
+  $\int^{(c,x):\int W} F(c)$.
+\end{lemma}
+\begin{proof}
+  \begin{align*}
+    \int^{(c,x):\int W} F(c)
+    & \simeq
+      \int^{(c_1\xrightarrow{f} c_2):  \int y}
+      \sum_{x\in W(c_1)}
+      F(c_2) \text{\quad by Lemma~\ref{l:colim-on-elements}}
+  \end{align*}
+  On the other hand,
+  \begin{align*}
+    \int^c W(c)\times F(c)
+    & \simeq
+      \int^{(c_1\xrightarrow{f} c_2):  \int y}
+      W(c_1)\times
+      F(c_2) \text{\quad by item~\ref{it-coend-colims} of Corollary~\ref{cor:weighted-colims}}
+  \end{align*}
+\end{proof}
+% it is sufficient to prove it for $y$-weighted colimits, where $y$ is the yoneda
+% embedding $y: C\times C^o \rightarrow \Set$.  
+% in this case, this is just the
+% fact that a coend is computed as a colimit over the twisted category of arrows
+% (which is $\int y$).
+\begin{corollary}
+  \[
+ \int^{(c,x)\in \oint^c F(c)} J(c) \simeq \int^c F(c)\times J(c) 
+\]
+\end{corollary}
+\begin{proof}
+  \begin{align*}
+    \int^{(c,x)\in \oint^c F(c)} J(c) 
+    & \simeq
+      \int^{(c_1\xrightarrow{f}{} c_2):  \int y}
+      \sum_{x\in F(c_1)} J(c_2)
+      \\
+    & \simeq
+      \int^{c}
+      \sum_{x\in F(c)} J(c)
+  \end{align*}
+\end{proof}
+\begin{lemma}[Limits commute with dependent pairs]
+  \label{l:lim-dep-pairs}
+  The canonical morphism \[
+    \int_{d:D} \sum_{x\in K(d)} G(d,x) \rightarrow
+    \sum_{\alpha\in \lim K}\int_d G(d,\alpha_d)
+  \] 
+  is an isomorphism.
+\end{lemma}
+\begin{remark}
+  Recall that the mapping $H \mapsto H'=\sum_{x\in G(-)} H(c,-)$ induces an
+  equivalence between $[\int G, \Set]$ and $[C,\Set]/G$.
+  The converse functor take a functor $F \xrightarrow{\alpha}{} G$ and maps it
+  to the functor $(c,g)\mapsto \alpha^{-1}_c(\{g\})$.
+    Then, Lemma~\ref{l:gen-lim-dep-pairs} says that a section of $H'$ is a
+    section of $G$ together with a dependent section.
+\end{remark}
+In fact, we prove a stronger result:
+\begin{lemma}
+\label{l:gen-lim-dep-pairs}
+  Let $F,G : C \rightarrow \Set$ and $H: \int G \rightarrow \Set$ be a functor.
+  Then,
+  \[
+    [C,\Set](F, \sum_{x\in G(-)} H(c,-)) \simeq
+    \sum_{\alpha : F \rightarrow G} \int_{(c,x)\in \int F} H(c, \alpha_c(x))
+    \]
+\end{lemma}
+\begin{proof}
+  A natural transformation between $F$ and
+  $H'=\sum_{x\in G(-)} H(c,-))$ is the same as a natural transformation $\alpha:F
+  \rightarrow G$, and a morphism $F \rightarrow H'$ over $G$.
+  Through the equivalence with the category $[\int G, \Set]$, this second
+  component is equivalently a morphism $[\int G, \Set](\alpha^{-1}(\{-\}), H)$,
+  that is, an element of \[
+    \int_{c,g}\Set (\alpha^{-1}_c(g),H(c,g))
+  \]
+  We want it to be isomorphic to:
+  \begin{align*}
+    \int_{(c,x)\in \int F} H(c, \alpha_c(x))
+    & \simeq
+      \int_{(c,x)\in \int F} H(c, \alpha_c(x))
+  \end{align*}
+  \textcolor{red}{TODO: finish}
+\end{proof}
+\begin{proof} [Proof of Lemma~\ref{l:lim-dep-pairs}]
+ Apply Lemma~\ref{l:gen-lim-dep-pairs} with $F = 1$.
+\end{proof}
+
+\section{Doctrines}
+\textcolor{red}{avec l'histoire des sketches, va falloir reflechir a pourquoi on
+  peut toujours se ramener a $\mathcal{S}$ l'ensembles des categories $\lambda$-petites}
+\begin{definition}
+  A \textbf{doctrine} $\mathcal{S}$ (terminology borrowed from \cite{lack_accessible}) is
+  a (possibly large) collection of small categories, called shapes.
+  We say that a colimit is $\mathcal{S}$-shaped if
+  the domain of the diagram lies in $\mathcal{S}$.
+\end{definition}
+\begin{definition}
+ Let $C$ and $D$ be two small categories. The \textbf{pole $Z(C\bot D)$ of $C$ against
+   $D$} is the collection of functors $F:C\times D \rightarrow \Set$ such that
+ the canonical morphism
+ \[
+   \int^c \int_d F(c,d)
+   \rightarrow  \int_d \int^c F(c,d)
+ \]
+ is an isomorphism.
+ If $Z(C\bot D) = [C\times D, \Set]$, then we say that the pole is
+ \textbf{maximal} and that $C$-colimits commute with $D$-limits.
+\end{definition}
+% \begin{definition}
+%   Given two small categories $C$ and $D$, we say that $C$-colimits commute
+%   over $D$-limits if $Z(C\bot D) = [C\times D, \Set]$, that is, for any functor $F:C\times D \rightarrow \Set$, the
+%   canonical morphism
+%   \[
+%     \int^c \int_d F(c,d)
+%     \rightarrow  \int_d \int^c F(c,d)
+%   \]
+%   is an isomorphism.
+% \end{definition}
+\begin{definition}
+  We denote $\mathcal{S}^\bot$ the doctrine such that
+  $\mathcal{S}^\bot$-shaped colimits commute with 
+  $\mathcal{S}$-shaped limits in $\Set$.
+\end{definition}
+% \begin{definition}
+%   A \textbf{pole of a doctrine $\mathcal{S}$} is possibly large collection of
+%   functor $C\times D \rightarrow $
+% \end{definition}
+\begin{remark}
+  Considering~\cite{lack_accessible, commutationlim}, little is known about the
+  general commutation of limits with colimits, except for specific doctrines.
+  Typically, we consider small doctrines $\mathcal{S}$ and then
+  $\mathcal{S}^\bot$ is large.
+\end{remark}
+\begin{remark}
+$\mathcal{S}^\bot$ is closed under finite products.
+\end{remark}
+\begin{definition}
+  A doctrine $\mathcal{S}$ is 
+  \textbf{delightful} if, given any presheaf $F:C\rightarrow \Set$
+  $D \in \mathcal{S}$, if functors of the shape $(\int F)^o \times D \rightarrow C^o
+  \times D \rightarrow \Set$ are in $Z((\int F)^o \bot D)$, then 
+  $Z((\int F)^o \bot D)$ is maximal.
+\end{definition}
+\begin{remark}
+  In other words, a doctrine $\mathcal{S}$ is deligthful if,
+  for $(\int F)^o$ to be in $\mathcal{S}^\bot$, it is enough that
+  for any functor
+  $H:(\int F)^o \times D \rightarrow \Set$ with $D \in \mathcal{S}$, the 
+  canonical morphism
+  \[
+    \int^{(c,x): \int F} \int_d H(c,d) \rightarrow
+    \int_d \int^{(c,x): \int F}  H(c,d) 
+  \]
+  is an isomorphism.
+\end{remark}
+\begin{remark}
+  There is an equivalent definition of delightful doctrines which only
+  talks about poles of $F = y : C^o \times C \rightarrow \Set$,
+  because a coend is computed as a colimit over a twisted arrow category
+  (Item~\ref{it-coend-colims} of Corollary~\ref{cor:weighted-colims}), which is
+  a category of the shape $(\int y)^o$.
+\end{remark}
+% \begin{lemma}
+%   A doctrine $\mathcal{S}$ is 
+%   {delightful} if and only if, given any category $C$,
+%   for $(\int y)^o$ to be in $\mathcal{S}^\bot$, where $y : C\times C^o
+%   \rightarrow \Set$ is the yoneda embedding, it is enough that
+%   for any functor
+%   $H:(\int y)^o \times D \rightarrow \Set$, the 
+%   canonical morphism
+%   \[
+%     \int^{(c,x): \int y} \int_d H(c,d) \rightarrow
+%     \int_d \int^{(c,x): \int y}  H(c,d) 
+%   \]
+%   is an isomorphism.
+% \end{lemma}
+% \begin{proof}
+%   Because a coend is computed as a colimit on the twisted category, which is
+%   a category of the shape $\int y$.
+% \end{proof}
+% \begin{definition}
+%  Let $\mathcal{S}$ be a doctrine. A presheaf $F:A \rightarrow \Set$ is
+%  called \textbf{$\mathcal{S}$-flat} if its left Kan extension 
+%  preserve $\mathcal{S}$-shaped limits of representable presheaves.
+% \end{definition}
+% \begin{remark}
+%   If a presheaf $F : A \rightarrow \Set$ is $\mathcal{S}$-flat then, it
+%   preserves $\mathcal{S}$-shaped limits. The converse is true if
+%   $A$ is $\mathcal{S}$-complete.
+%   \end{remark}
+  \begin{lemma}
+    \label{l:flat-implications}
+    Let $y : C^o \times C \rightarrow \Set$ be the yoneda functor, with $C$ small.
+We have an easy chain of implications, for a presheaf $F : C \rightarrow \Set$:
+\begin{enumerate}
+\item $(\int F)^o \in \mathcal{S}^{\bot}$ (we say then that $F$ is \textbf{$\mathcal{S}$-flat}) \label{it-el-presheaves};
+\item $F$ is a $\mathcal{S}^{\bot}$-colimit of representable presheaves;
+\item $\Lan_yF$ preserves any $\mathcal{S}$-shaped limits
+  \label{it-lan-preserves};
+\item $\Lan_yF$ preserves any $\mathcal{S}$-shaped limits of representable presheaves;
+  \label{it-lan-preserves-rep}
+  \item $F$ preserves any $S$-shaped limits;
+    \label{it-F-preserves}
+\end{enumerate}
+Moreover, if $C$ is $\mathcal{S}$-complete, then
+item~\ref{it-F-preserves} entails item~\ref{it-lan-preserves-rep}.
+\end{lemma}
+\begin{proof}
+ Straightforward using the coend formula for the left Kan extension. 
+\end{proof}
+\begin{remark}
+  Let $\mathcal{S}$ be a doctrine.
+  It is straightforward to check a doctrine is deligthful if and only if
+  item~\ref{it-lan-preserves} implies item~\ref{it-el-presheaves} 
+  in Lemma~\ref{l:flat-implications} (just unfold the definitions).
+  As a consequence, the first \ref{it-lan-preserves} items
+  are logically equivalent.
+\end{remark}
+That is why a delightful doctrine is delightful.
+\cite{lack_accessible} proposes the subclass of sound doctrines
+(proved delightful by Lemma~\ref{l:sound-delightful}).
+\begin{definition}
+  A doctrine $\mathcal{S}$ is \textbf{sound} \cite[Definition 2.2]{lack_accessible}
+  if, given any small categories $C$ and $D$, with $D \in \mathcal{S}$,
+  if the pole $Z(C \bot D)$ contains all the functors of the shape $C(S -,=)$, with $S :
+  D^o \rightarrow C$, then it is maximal.
+  % then $C \in \mathcal{S}^\bot$.
+  % $D \in \mathcal{S}$, if functors of the shape $(\int F)^o \times D \rightarrow C^o
+  % \times D \rightarrow \Set$ are in $Z(\int F \bot D)$, then 
+  % in fact $Z(\int F \bot D) = [\int F\times D, \Set]$.
+  % if, for a small category $C$ to be in $\mathcal{S}^\bot$,
+  % given any presheaf $F:C\rightarrow \Set$,
+  % for $(\int F)^o$ to be in $\mathcal{S}^\bot$,
+  % it is enough that
+  % that for any functor
+  % $H:D \rightarrow C $ with $D \in \mathcal{S}$, the 
+  % canonical morphism
+  % \[
+  %   \int^{c: C} \int_d D(c, H d) \rightarrow
+  %   \int_d \int^{c}  D(c, H d) 
+  % \]
+  % is an isomorphism.
+\end{definition}
+\begin{remark}
+  Note that by yoneda, the codomain of the canonical 
+  \[
+    \int^{c: C} \int_d D(S c, d) \rightarrow
+    \int_d \int^{c}  D(S c, d) 
+  \]
+  is a singleton set.
+  As a colimit consists in taking the connected components of the category of elements,
+  another way to state soundness is that the category of cocones of any functor
+  $S : D \rightarrow C$ is connected.
+\end{remark}
+\begin{example}
+  Here are some examples \cite[Example 2.3]{lack_accessible} of sound doctrines:
+  \begin{itemize}
+  \item (easy)
+    $\mathcal{S} = \{ \lambda\text{-small categories} \}$, and then
+    $\mathcal{S}^\bot$ is the collection of $\lambda$-filtered categories;
+  \item (non trivial) the doctrine of finite discrete categories;
+  \item 
+    $\mathcal{S} = \{ \text{finite connected categories} \}$, and then
+    $\mathcal{S}^\bot$ is the collection of sifted categories;
+    \item (non-examples) the doctrine of countable products (i.e. countable
+      discrete categories) and the doctrine of pullbacks are not sound.
+  \end{itemize}
+\end{example}
+
+\begin{lemma}
+  \label{l:sound-delightful}
+  Any sound doctrine $\mathcal{S}$ is delightful~\cite[Theorem 2.4]{lack_accessible}
+\end{lemma}
+\begin{proof}
+  So we are given a presheaf $F:C\rightarrow \Set$ such that 
+  for any functor
+  $H:(\int F)^o \times D \rightarrow \Set$, the 
+  canonical morphism
+  \[
+    \int^{(c,x): \int F} \int_d H(c,d) \rightarrow
+    \int_d \int^{(c,x): \int F}  H(c,d) 
+  \]
+  is an isomorphism.
+  Now we would like to show that $(\int F)^o \in \mathcal{S}^\bot$. As
+  $\mathcal{S}$ is sound, it is enough to show that given any functor
+  $H:D \rightarrow (\int F)^oC $ with $D \in \mathcal{S}$, the 
+  canonical morphism
+  \[
+    \int^{f: (\int F)^o} \int_d \smallint F (f, H d) \rightarrow
+    \int_d \int^{f}  \smallint F(f, H d) 
+  \]
+  is an isomorphism.
+  
+  Let us rephrase this statement: by universal property
+of $\int F$ as the comma category $1/F$,
+  a functor 
+  $H:D \rightarrow (\int F)^o $ is equivalently given by a functor
+  $G : D \rightarrow C^o$ together with an element $\alpha \in \lim FG$.
+  We then want that
+  \[
+    \int^{(c,x): \int F} \int_d  \sum_{f : C(c,G d)} (f(x)=\alpha_d) \rightarrow
+    \int_d \int^{(c,x)}  \sum_{f : C(c,G d)} (f(x)=\alpha_d) 
+  \]
+  is an isomorphism.
+
+  We would like to apply our hypothesis on $\int F$, but we need first to remove the
+  the dependency on $x$. The trick is to show take the coproduct of these
+  morphisms over all possible $\alpha\in \lim GH$ is an isomorphism.
+
+  By the fact that limits commute with dependent pairs in $\Set$
+  (Lemma~\ref{l:lim-dep-pairs}),
+  the domain of the resulting coproduct morphism is canonically isomorphic to
+\[
+  \int^{(c,x): \int F} \int_d  \sum_{x' \in FGd}\sum_{f : C(c,G d)} (f(x)=x')
+  \simeq
+  \int^{(c,x): \int F} \int_d  C(c,G d).
+  \]
+  By a similar argument, the codomain of the resulting morphism is canonically
+  isomorphic to
+  \[
+    \int_d \int^{(c,x): \int F}   C(c,G d).
+  \]
+Now we can apply our hypothesis on $\int F$, which concludes the argument.
+
+  
+\end{proof}
+\begin{remark}
+  By inspecting the proof above, we see that for sound doctrines,
+  item~\ref{it-lan-preserves-rep} implies the first one in
+  Lemma~\ref{l:flat-implications}. 
+  As a consequence, the first \ref{it-lan-preserves-rep} items
+  are logically equivalent.
+\end{remark}
+This leads to the following definition:
+\begin{definition}
+  A doctrine $\mathcal{S}$ is 
+  \textbf{strongly delightful} if, given any presheaf $F:C\rightarrow \Set$
+  $D \in \mathcal{S}$,
+  if the pole $Z((\int F)^o \bot D)$ contains all the functors of the shape
+   $(\int F)^o \times D \rightarrow C^o
+  \times D \xrightarrow{C(-, S =)}{} \Set$ for $S : D^o \rightarrow C$, then it is maximal.
+  % if functors of the shape $(\int F)^o \times D \rightarrow C^o
+  % \times D \rightarrow \Set$ are in $Z((\int F)^o \bot D)$,
+\end{definition}
+\begin{lemma}
+  We have an easy chain of implications:
+  \begin{enumerate}
+  \item $\mathcal{S}$ is sound;
+  \item $\mathcal{S}$ is strongly delightful;
+  \item $\mathcal{S}$ is delightful.
+  \end{enumerate}
+\end{lemma}
+\begin{question}
+  Could it be that if a doctrine is strongly delightful, then it is sound?
+\end{question}
+\begin{remark}
+  \label{r:strong-delight-car}
+  A doctrine is strongly delightful exactly when
+  item~\ref{it-lan-preserves-rep} in Lemma~\ref{l:flat-implications} entails the first one.
+
+  Thus, in this case, given a small category $C$ with $\mathcal{S}$-shaped limits, a presheaf
+  $C \rightarrow \Set$ preserves $\mathcal{S}$-shaped limits if and only it is a
+  $\mathcal{S}^\bot$-shaped colimit of representable presheaves.
+\end{remark}
+\begin{conjecture}
+  Let $C$ be a small category and
+  $\mathcal{S}$ be a doctrine.
+  Let
+  \begin{itemize}
+  \item $U_\mathcal{S}$ be the forgetful 2-functor from categories with $\mathcal{S}$-shaped colimits
+    and functors preserving them to the category of small categories.
+    \item $V_\mathcal{S}$ be
+     be the forgetful 2-functor from cocomplete categories and cocontinuous
+     functors to the 2-category of small categories and functors preserving $\mathcal{S}$-shaped
+colimits;
+\item $\Dir{\mathcal{S}}(C)$ the full subcategory of $\hat{C}$ consisting of
+  $\mathcal{S}$-shaped colimits of representable presheaves;
+\item $\Cont{\mathcal{S}}(C)$ the full subcategory of $\hat{C}$ consisting of
+  presheaves preserving $\mathcal{S}$-shaped colimits.
+  \end{itemize}
+  Then,
+  \begin{itemize}
+  \item 
+    the yoneda embedding exhibits $\Dir{\mathcal{S}}(C)$ as the weak free
+    object for $U_\mathcal{S}$
+    (weak in the sense that
+    the universal morphism is only up to iso);
+    \item
+      if $\mathcal{S}$ is a small set, then 
+      the yoneda embedding exhibits  $\Cont{\mathcal{S}}(C)$ as the
+      weak free object with respect to $V_\mathcal{S}$ (weak in the sense that
+      the universal morphism is only up to iso).
+  \end{itemize}
+\end{conjecture}
+This is a conjecture but I will give arguments.
+% as it generalizes the case of Example~\ref{ex:S-lambda-small} which is
+% treated in \cite{adamek_rosicky}.
+\begin{question}
+What happens to $\Cont{\mathcal{S}}(C)$ if $\mathcal{S}$ is not small?
+\end{question}
+\begin{remark}
+  $\Dir{\mathcal{S}^\bot}(C)$  is a full subcategory of $\Cont{\mathcal{S}}(C)$.
+\end{remark}
+\begin{lemma}
+  If $\mathcal{S}$ is strongly delightful and $C$ is $\mathcal{S}$-complete, then
+  $\Dir{\mathcal{S}^\bot}(C)$ is equivalent to $\Cont{\mathcal{S}}(C)$.
+\end{lemma}
+\begin{proof}
+  By Remark~\ref{r:strong-delight-car}.
+\end{proof}
+\begin{conjecture}
+  If $\mathcal{S}$ is strongly delightful and
+  $\Dir{\mathcal{S}^\bot}(C)$ is equivalent to $\Cont{\mathcal{S}}(C)$, then
+  $C$ is $\mathcal{S}$-complete.
+\end{conjecture}
+  The universal property of $\Dir{\mathcal{S}}(C)$ should be easy to prove.
+  We will thus focus on the universal property of $\Cont{\mathcal{S}}(C)$.
+
+  \begin{lemma}
+    The yoneda embedding $y : C \rightarrow \Cont{\mathcal{S}}(C)$ preserves
+    $\mathcal{S}$-shaped colimits.
+  \end{lemma}
+  \begin{proof}
+    Let $K:D\rightarrow C$ be a $\mathcal{S}$-shaped diagram with an existing colimit in
+    $C$. Let us check that $y\colim K$ has the required universal property, that
+    is, given any presheaf $F$ in $\Cont{\mathcal{S}}(C)$, we have 
+    $\hat{C}(y \colim K, F)$ is canonically isomorphic to $[D, \hat{C}](y K,
+    F)\simeq \lim FK$.
+    But $\hat{C}(y \colim K, F)$ is canonically isomorphic to $F\colim K$, which
+    is canonically isomorphic to $\lim FK$.
+  \end{proof}
+  First, some interesting (although not necessary lemma):
+  \begin{lemma}
+    Any cocontinuous functor $L:\Cont{\mathcal{S}}(C)\rightarrow B$,
+    with $B$ locally small,
+    has a right adjoint.
+  \end{lemma}
+  \begin{proof}
+   If this is true, then the right adjoint is given by $R(b)(x) = \hat{A}(y x,
+   R(b)) = B(Ly x, b)$. Here, $R$ clearly defines a functor from $B$ to $\hat{A}$.
+   We check that any $R(b)$ preserves $\mathcal{S}$-shaped colimits: let $\colim K$ be a 
+   $\mathcal{S}$-shaped colimit in $A$. Then, $R(b)(\colim K) = B(Ly\colim K,b)=
+   B(\colim LyK, b) = \lim B(yK,b)=\lim R(b)K$.
+   \end{proof}
+   \begin{remark}
+     This also follows from the adjoint functor theorem stating that any
+     cocontinuous functor out of a total category (such as presentable
+     categories) is a left adjoint.
+   \end{remark}
+  \begin{remark}
+   This provides examples of a left adjoint (the left Kan extension) which the composition of a right
+   adjoint (the embedding in the total presheaf category) and a left adjoint
+   (the left Kan extension).
+  \end{remark}
+  Another noticeable fact:
+  \begin{lemma}
+    $\Cont{\mathcal{S}}(C)$ is complete.
+  \end{lemma}
+  \begin{proof}
+   Because limits commute with limits.
+  \end{proof}
+  But in fact, everything follows from the following lemma:
+  \begin{lemma}
+    If $\mathcal{S}$ is small, then
+    $\Cont{\mathcal{S}}(C)$ is a reflective subcategory of $\hat{C}$.
+  \end{lemma}
+  \begin{proof}
+    We apply Conjecture~\ref{conj:fibrant-reflective}.
+    We only have to devise an orthogonal factorization system on $\hat{C}$ such that a
+    presheaf is fibrant if and only it preserves $\mathcal{S}$-shaped colimits.
+    But, observe that a presheaf $F:C^o \rightarrow \Set$  preserves a colimit $\int^i D(i)$ if and
+    only if $F\rightarrow 1$ is right orthogonal to $m_D:y_{\int^i D(i)}\rightarrow \int_i y_{D(i)}  $.
+    Thus we consider the orthogonal factorization system cofibrantly generated
+    by the collection of such morphisms $m_D$. Note that this is a small set
+    because $C$ is small and $\mathcal{S}$ also is.
+  \end{proof}
+  \begin{corollary}
+    $\Cont{\mathcal{S}}(C)$ is cocomplete, by Lemma~\ref{l:reflect-cocomplete}.
+  \end{corollary}
+  \begin{remark}
+    $\mathcal{S}^\bot$-shaped colimits in $\Cont{\mathcal{S}}(C)$ are computed pointwise.
+  \end{remark}
+  \begin{lemma}
+    If $\mathcal{S}$ is closed under binary products (for example, $\mathcal{S}
+    = {\mathcal{S}'}^\bot$),
+    $\Dir{\mathcal{S}}(C)$ has $\mathcal{S}$-colimits, which are
+    computed pointwise.
+  \end{lemma}
+  \begin{lemma}
+    Given a functor $F:C \rightarrow B$ preserving $\mathcal{S}$-shaped
+    colimits, with $B$ cocomplete, then the left Kan extension of $F$ along the
+    yoneda embedding in $\Cont{\mathcal{S}}(C)$ is the unique cocontinuous
+    functor (up to iso) yielding $F$ when precomposing with the yoneda embedding.
+  \end{lemma}
+  \begin{proof}
+    That it is cocontinuous comes from Lemma~\ref{l:cocontinuous-lkan}. That it
+    is unique up to iso follows from Lemma~\ref{l:unique-cocontinuous-lkan}.
+  \end{proof}
+
+
+  \begin{definition}
+    \label{d:presentable-objs}
+    Let $\mathcal{C}$ be a locally small category.
+    Let $\Pres{\mathcal{S}}(\mathcal{C})$ be the full subcategory of objects $c$ of $\mathcal{C}$ such that 
+    $y_c : \mathcal{C} \rightarrow \Set$ is in $\Cont{\mathcal{S}}(\mathcal{C}^o)$, that is,
+    $\mathcal{C}(c,-)$ preserves $\mathcal{S}$-shaped colimits.
+    In other words, $\Pres{\mathcal{S}}(\mathcal{C})$ is the pullback (beware:
+    non locally small categories involved)
+    \[
+      \xymatrix{
+        \Pres{\mathcal{S}}(\mathcal{C}) \ar[r]\ar[d]&
+        \mathcal{C}
+        \ar[d]
+        \\
+        \Cont{\mathcal{S}}(\mathcal{C}^o) \ar[r]
+        &
+        [\mathcal{C}, \Set]
+      }
+    \]
+  \end{definition}
+  \begin{conjecture}
+    $\Cont{\mathcal{S}}(\mathcal{C}) \rightarrow \hat{\mathcal{C}}$  and $\Dir{\mathcal{S}}(\mathcal{C})$ are
+    isofibrations, and thus the pullback
+    in Definition~\ref{d:presentable-objs} is also a weak pullback.
+  \end{conjecture}
+  \begin{lemma}
+    \( \Pres{\mathcal{S}^\bot}(\mathcal{C}) \)
+    is closed under any $\mathcal{S}$-colimits
+    that exists in $\mathcal{C}$. In particular, if
+    $\mathcal{C}$ is cocomplete (for example $\mathcal{C} =
+    \Cont{\mathcal{S}}(C)$ with $\mathcal{S}$ and $C$ small),
+    then $\Pres{\mathcal{S}^\bot}(\mathcal{C})$ has
+    $\mathcal{S}$-colimits.
+  \end{lemma}
+  \begin{conjecture}
+    % For $\mathcal{S}$ and $C$ small,
+    $\Pres{\mathcal{S}^\bot}(\Cont{\mathcal{S}}(C))$ is the 
+    closure of $C$ under $\mathcal{S}$-colimits in $\Cont{\mathcal{S}}(C)$
+    (which may not always exist, but do if $\mathcal{S}$ and $C$ are small).
+  \end{conjecture}
+  \begin{question}
+   What about $\Pres{\mathcal{S}^\bot}(\Dir{\mathcal{S}}(C))$?
+  \end{question}
+  \begin{corollary}
+    If $\mathcal{S}$  and $C$ are small, and $C$ is $\mathcal{S}$-cocomplete, then
+    $\Pres{\mathcal{S}^\bot}(\Cont{\mathcal{S}}(C))\simeq C$.
+    Thus in this case, a presheaf in $\Pres{\mathcal{S}^\bot}(\Cont{\mathcal{S}}(C))$ preserves
+    in fact any colimit, as it is a representable presheaf.
+  \end{corollary}
+  \begin{question}
+    Which kind of free cocompletion of $C$ is
+    $\Pres{\mathcal{S}^\bot}(\Cont{\mathcal{S}}(C))$?
+    % ? Not the usual free one of course
+  \end{question}
+  \begin{conjecture}
+    \begin{enumerate}
+    \item 
+      $\Dir{\mathcal{S}} \circ \Pres{\mathcal{S}} \circ \Dir{\mathcal{S}} \simeq \Dir{\mathcal{S}} $
+      \item
+      $\Cont{\mathcal{S}} \circ \Pres{\mathcal{S}^\bot} \circ \Cont{\mathcal{S}} \simeq \Cont{\mathcal{S}} $
+    % \item if $C$ has $\mathcal{S}$-shaped colimits, then
+    %   $\Pres{\mathcal{S}^\bot}(\Cont{\mathcal{S}}(C))\simeq C$ (and thus
+    %   $\Pres{\mathcal{S}^\bot}(\Dir{\mathcal{S}^\bot}(C))\simeq C$).
+      % $\Cont{\mathcal{S}}(C) \simeq \Dir{\mathcal{S}^\bot}(C)$
+    % \item Given a functor $F:C\rightarrow \Set$, the opposite of its category of
+    %   elements $\int F$ is in $\mathcal{S}^\bot$ if and only if its left Kan
+    %   extension preserves $\mathcal{S}$-shaped limits.
+    \end{enumerate}
+  \end{conjecture}
+  \begin{proof}
+  \end{proof}
+\section{Presentable categories (old new attempt)}
+
+Let $\lambda$ be a regular cardinal.
+\begin{definition}
+  A \textbf{$\lambda$-presentable object} in a category $C$ is an object such
+  that its yoneda embedding preserves $\lambda$-directed colimits.
+\end{definition}
+It says no more that any morphism from such an object to a $\lambda$-directed
+colimit factors (essentially uniquely) through some object of the colimiting cocone.
+\begin{lemma}
+  A $\lambda$-presentable object is also $\kappa$-presentable, for $\kappa > \lambda$.
+\end{lemma}
+\begin{proof}
+  Obvious, because a $\kappa$-filtered category is also $\lambda$-filtered.
+\end{proof}
+\begin{definition}
+  \label{d:accessible}
+  A $\lambda$-accessible category is a category closed
+  under $\lambda$-directed colimits and there is a small set $A$ of
+  $\lambda$-presentable objects such that every object is a $\lambda$-directed
+  colimit of objects of $A$.
+\end{definition}
+\begin{lemma}
+  Consider the full subcategory $\Pres\lambda(C)$ of $\lambda$-presentable
+  objects of a category $C$. If $C$ is locally $\lambda$-accessible,
+  $\Pres\lambda(C)$ is essentially small (in the following we will reason as if
+  it were small), and every object in $C$ is a $\lambda$-directed colimits of objects
+  of $\Pres\lambda(C)$.
+\end{lemma}
+\begin{definition}
+  A $\lambda$-presentable category is a $\lambda$-accessible category
+  which is cocomplete.
+\end{definition}
+\begin{proposition}
+  \label{d:pres-strong-gen}
+  A category is $\lambda$-presentable category if and only if it is a
+  cocomplete category with a strong generator formed of $\lambda$-presentable objects.
+\end{proposition}
+To go from the strong generator to a proper set of generating $\lambda$-presentable objects
+above: take $\lambda$-small colimits of objects in the strong generator.
+\begin{conjecture}
+ Given a $\lambda$-presentable $C$ category with a strong generator $A$ of
+ $\lambda$-presentable objects,
+ \begin{itemize}
+   \item $\Pres\lambda(C)$ is closed under $\lambda$-small colimits;
+ \item 
+   $\Pres\lambda(C)$ is equivalent to the
+   full subcategory of $C$ consisting of $\lambda$-small colimits of elements $A$.
+ \end{itemize}
+\end{conjecture}
+\begin{proof}
+  I haven't tried to prove it.
+  \end{proof}
+\begin{example}
+  Any presheaf category is $\omega$-presentable: consider the strong generator consisting
+  of representable presheaves.
+\end{example}
+\begin{lemma}
+  A locally $\lambda$-presentable category is also locally $\kappa$-presentable, for $\kappa > \lambda$.
+\end{lemma}
+\begin{proof}
+  We consider the alternative characterisation of locally presentable categories
+  of Proposition~\ref{d:pres-strong-gen}.
+  The set of ''presenting'' $\kappa$-presentable objects is induced by noticing that
+  $\lambda$-presentable objects are also $\kappa$-presentable, and form a strong
+  generator. Then, we take $\kappa$-small colimits of them.
+\end{proof}
+
+There is an alternative definition of presentable categories as free cocompletions.
+\begin{definition}
+ Let $U_{\Cont\lambda}$ denotes the forgetful functor from cocomplete categories
+ and cocontinuous functors
+ to small categories and $\lambda$-cocontinous functors between them (that is,
+ functors preserving $\lambda$-small colimits).  In particular, the codomain of $U_{\Cont{0}}$
+ is the usual category of small categories.
+ Let $\hat{A}$ denotes the presheaf category $[A^o, \Set]$, for a small category $A$.
+\end{definition}
+In the following, $A$ denotes a small category.
+\begin{lemma} The yoneda embedding
+$y:A \rightarrow \hat{A}$ exhibits the free object with respect to
+$U_{\Cont{0}}$.
+The unique cocontinuous functor induced by the universal property is computed as a left Kan
+extension.
+\label{l:free-cocomp}
+  \end{lemma}
+  \begin{proof}
+    Let $G:A \rightarrow B$ where $B$ is a cocomplete category.
+    This induces a functor $Lan_y(G) : \hat{A} \rightarrow B$ which has a right
+    adjoint (as explained later, I think this is true even if $B$ were not cocomplete). It is
+    cocontinuous and unique because any presheaf is a colimit of representables ones, whose
+    image is fixed by $G$.
+  \end{proof}
+  \begin{lemma}
+    \label{l:cont-free}
+    (\cite[Proposition 1.45]{adamek_rosicky})
+    Let $\Cont\lambda(A)$ be the full subcategory of $\hat{A}$ consisting of
+presheaves preserving $\lambda$-small colimits of $A$.
+    The yoneda embedding
+    $y:A \rightarrow \Cont\lambda{A}$ is the free object of $A$ with respect to $U_{\Cont{\lambda}}$.
+  \end{lemma}
+   See the reference for the proof. The only thing which is not obvious is the
+   fact that $\Cont\lambda{A}$ is cocomplete. This relies on the orthogonal
+   reflection section of \cite{adamek_rosicky}.
+   We recast this section in \S\ref{ss:ortho} in terms of orthogonal
+   factorization systems which look more standard to us. Hopefully, the results
+   involved in \S\ref{ss:ortho} could be inserted at the same place than the original
+   orthogonal reflection section (that is, they do not rely on results proven
+   later in \cite{adamek_rosicky}, in which case the argument could be circular).
+
+   Interestingly enough, the proof in \cite{adamek_rosicky} entails the following:
+   \begin{conjecture}
+    Any cocontinous functor $\Cont\lambda(A)\rightarrow B$ has a right adjoint,
+    which is roughly a nerve functor.
+    Thus, anticipating Proposition~\ref{prop:pres-repr},
+    \textbf{any cocontinuous
+    functor out of a presentable category has a right adjoint}.
+   \end{conjecture}
+   I write it as a conjecture because \cite{adamek_rosicky} assumes $B$ is
+   cocomplete, but I don't think it is important.
+   \begin{proposition}
+     \label{prop:pres-repr}
+     (\cite[Representation Theorem, 1.46]{adamek_rosicky})
+     A category $C$ is $\lambda$-presentable if and only if there exists a small
+     category $A$ such that $C$ is equivalent to $\Cont\lambda(A)$.
+     \end{proposition}
+     \begin{conjecture}
+       In Proposition~\ref{prop:pres-repr} above, the categories $A$ that work are exactly the
+       full subcategories generated by a strong generator of $\lambda$-presentable objects.
+     \end{conjecture}
+       I should check that $C$ is equivalent to $\Cont\lambda(A)$ for a
+        strong generator $A$ of $C$ consisting of $\lambda$-presenting objects.
+        Anyway, we have the following lemma:
+     \begin{lemma}
+       \label{l:cont-repr-strong-gen}
+      Representable functors in $\Cont\lambda(A)$ form a strong generator
+      consisting of $\lambda$-presentable objects.
+     \end{lemma}
+     The only thing missing for $\lambda$-presentability of $\Cont\lambda(A)$ is
+     that it is cocomplete, and this is proven in \S\ref{ss:ortho}.
+
+       Regarding the proof, it is straightforward to check that representable presheaves form a strong
+       generator.
+       That they are $\lambda$-presentable relies on the following lemma:
+       \begin{lemma}
+         \label{l:cont-lambda-directed-colim}
+         $\Cont\lambda(A)$ is closed under $\lambda$-directed colimits, which
+         are computed pointwise.
+         \end{lemma}
+         In fact, $\Cont\lambda(A)$ is even cocomplete as we will see in
+         \S\ref{ss:ortho}. Colimits in
+         $\Cont\lambda(A)$ are computed pointwise exactly when the pointwise colimit
+         is in $\Cont\lambda(A)$ (this is a general argument working for any full subcategory).
+         Then, this lemma results from
+           the fact that $\lambda$-directed colimits commute with
+           $\lambda$-small limits in $\Set$.
+     % It is very easy to prove that representable presheaves form a strong
+     % generator.
+     % Now to prove that
+     % The proof is defered to \S\label{ss:ortho}
+           \begin{proposition}
+             (\cite[Representation Theorem 1.45]{adamek_rosicky})
+             \label{proof:reflective-subcat-pres}
+             A category $C$ is $\lambda$-presentable
+             if and only if it is a reflective subcategory of a presheaf
+             category, closed under (pointwise) $\lambda$-directed colimits.
+           \end{proposition}
+           This follows from Proposition~\ref{prop:pres-repr} and the following result:
+           \begin{proposition}
+              (\cite[Theorem 1.39]{adamek_rosicky})
+              Let $C$ be a reflective subcategory of a $\lambda$-presentable category $K$ such
+              that the embedding preserves $\lambda$-directed colimits.
+              Then $C$ is $\lambda$-presentable.
+           \end{proposition}
+             \begin{proof}
+               Here we provide a different proof than \cite{adamek_rosicky},
+               not relying on orthogonal reflection.
+
+               $C$ is cocomplete by Lemma~\ref{l:reflect-cocomplete}. Now we have
+               to give a set of $\lambda$-presenting objects generating $C$
+               under $\lambda$-directed colimits. We take
+                the image of $\Pres\lambda(K)$ by the left adjoint.
+           \end{proof}
+   
+\subsection{Orthogonal factorization systems}
+\label{ss:ortho}
+This section is somehow the counterpart of
+orthogonal reflection section of \cite{adamek_rosicky}.
+It relies on the observation that orthogonality classes there correspond
+to fibrant objects for a cofibrantly generated orthogonal factorization system.
+Thus, the transfinite induction that they do correspond to the usual small
+object argument (although usually performed for weak factorization systems).
+
+The goal here is to show that $\Cont\lambda(A)$ is cocomplete (and even
+$\lambda$-presentable): this is the missing part of Lemma~\ref{l:cont-free}.
+More precisely, we show that $\Cont\lambda$ is a reflective subcategory of $\hat{A}$.
+We don't recall what orthogonal factorization systems are.
+
+\begin{proposition}
+ Given a small set $I$ of morphisms in a presentable category,
+ Then $({}^\bot (I^\bot), I^\bot)$ is an orthogonal factorization system.
+\end{proposition}
+\begin{proof}
+  The main point of the proof is the construction of the factorization.
+  This is done by a transfinite construction.
+
+This is claimed by the nlab page on orthogonal factorization systems, although I
+haven't found a proper reference for it (maybe Kelly's transfinite paper, as
+this result is also mentionned on the related nlab page).
+\end{proof}
+\begin{conjecture}
+  \label{conj:fibrant-reflective}
+ Given an orthogonal factorization system, the full subcategory of fibrant
+ objects is reflective (the left adjoint simply factorizes the
+ terminal morphism). 
+\end{conjecture}
+\begin{proof}
+  I did not find a proper reference for this. I remember reading stuff about
+  idempotent monads related to orthogonal factorization systems.
+\end{proof}
+\begin{corollary}
+  \label{cor:cont-refl}
+ $\Cont\lambda(A)$ is a reflective subcategory of $\hat{A}$ (and hence is
+ cocomplete, by Lemma~\ref{l:reflect-cocomplete}).
+\end{corollary}
+This relies on the following observation:
+\begin{remark}
+  A presheaf $F:A^o \rightarrow \Set$  preserves a colimit $\int^i D(i)$ if and
+  only if
+  $F\rightarrow 1$ is right orthogonal to $y_{\int^i D(i)}\rightarrow \int_i y_{D(i)}  $.
+\end{remark}
+\begin{remark}
+  Anticipating the sketch section, we can see why models of limit-sketches gather
+  into a locally presentable category. For colimit sketches, we would consider
+  left orthogonality rather than right orthogonality.
+\end{remark}
+\begin{corollary}
+ $\Cont\lambda(A)$ is $\lambda$-presentable.
+\end{corollary}
+\begin{proof}
+  It is cocomplete (Corollary~\ref{cor:cont-refl})
+  and has a strong generator consisting of representables
+  functors (Lemma~\ref{l:cont-repr-strong-gen}). Thus, it is $\lambda$-presentable according to
+Definition~\ref{d:pres-strong-gen}.
+\end{proof}
+
+
+\section{Accessible categories}
+We have already introduced accessible categories in Definition~\ref{d:accessible}.
+\begin{question}
+  How do you show the equivalence between different definitions of accessible
+  categories? and the fact that any presentable category is accessible?
+\end{question}
+\begin{remark}
+ Contrary to what happens with presentability,
+ a $\lambda$-accessible category may not be $\kappa$-presentable, for $\kappa > \lambda$.
+ But there always exist such a $\kappa$ for which it is true.
+ See the section ``Raising the index of accessibility'' in \cite{adamek_rosicky}.
+ They introduce in \cite[2.12]{adamek_rosicky} a transitive relation ``sharply smaller''
+ between two cardinals, for which it is true:
+ \begin{itemize}
+ \item 
+   a cardinal is always
+   sharply smaller than its successor;
+   \item $\omega$ is sharply smaller than any other regular cardinal;
+     \item if $\lambda\leq \mu$, then $\lambda$ is sharply smaller than
+       the successor of $2^\mu$;
+      \item as a consequence (not sure why) of the last item, for any set of cardinals, there
+        exists a cardinal which is sharply greater than any cardian in this set.
+ \end{itemize}
+\end{remark}
+As a consequence of this remark:
+\begin{proposition}
+  For any family of accessible categories,
+  there exists arbitrary large regular
+ cardinals $\mu$ such that they are $\mu$-accessible.
+\end{proposition}
+It often happens that small categories are accessible:
+% (recall that the free split idempotency completion is called cauchy completion and
+% gives a criterion to compare presheaf categories)
+\begin{lemma}
+ If a category has equalizers or coequalizers, then it has split idempotents.
+\end{lemma}
+\begin{proof}
+ The splitting, according to nlab, consists in taking the (co)equalizer of the
+ idempotent with the identity morphism.
+\end{proof}
+\begin{lemma}
+  \cite[2.4]{adamek_rosicky}
+  Each accessible category has split idempotents. 
+\end{lemma}
+\begin{proof}
+ The diagram consisting of one object, the identity and the idempotent is
+ $\lambda$-filtered. The colimit provides a splitting.
+\end{proof}
+\begin{proposition}
+  \cite[2.6]{adamek_rosicky}
+  Every small category with split idempotents is accessible. 
+\end{proposition}
+\begin{question}
+  When $C$ is $\lambda$-presentable,
+ $\Pres\lambda(C)$ has small $\lambda$-colimits and thus is accessible.
+ What is $\Pres{}(\Pres\lambda(C))$ then?
+\end{question}
+\begin{remark}
+  The Cauchy completion is an idempotent monad which freely adds split idempotents.
+  I don't know if it will be relevant at some point, but it is known that
+ two presheaves categories are equivalent if and only if the base categories have equivalent
+ Cauchy completions.
+\end{remark}
+
+
+\begin{proposition}
+  (\cite[Remarks 2.2, (3)]{adamek_rosicky})
+  Any object $c$ of a $\lambda$-accessible category is presentable
+  (although not necessarily $\lambda$-presentable).
+\end{proposition}
+A bound on the involved cardinal is the cardinal of the set of morphisms from any
+element set of the generating set of presentable objects to $c$.
+The proposition indeed follows from the following lemma, and the fact that $\lambda$-presentable
+objects are also $\kappa$-presentable, for $\kappa>\mu$
+\begin{lemma}
+  (\cite[1.16]{adamek_rosicky})
+ A $\lambda$-small colimit of $\lambda$-presentable objects is $\lambda$-presentable.
+\end{lemma}
+There is a not obvious converse to this fact:
+\begin{proposition}
+  (\cite[Proposition 2.3.11]{accessible})
+  $\mu$-presentable objects are $\mu$-small $\lambda$-directed colimits of
+  $\lambda$-presentable objects.
+\end{proposition}
+\begin{remark}
+ The fact that a full and faithful embedding between two accessible categories preserves
+ $\lambda$-directed colimits for some $\lambda$ is undecidable \cite[2.17.(3)]{adamek_rosicky}.
+\end{remark}
+
+\begin{proposition}
+  (\cite[2.24]{adamek_rosicky})
+  \label{prop:flat-functor}
+ Let $F:A \rightarrow \Set$ be a functor. Then the opposite of its category of elements $\int F$
+ is $\lambda$-filtered (that is, every $\lambda$-small diagram has a cone in
+ $\int F$) if and only if it left Kan
+ extension $\hat{A}\rightarrow \Set$ along yoneda preserve $\lambda$-small limits.
+
+ In this case, as $F$ is a colimit over $(\int F)^o$, 
+ $F$ is a $\lambda$-filtered colimit of representable presheaves.
+\end{proposition}
+\begin{remark}
+  Such a functor is called \emph{flat}.
+  We can restrict to $\lambda$-small limits of representable presheaves in the
+  statement above.
+  We also know from Lemma~\ref{l:free-cocomp} that this left Kan extension is
+  cocontinuous.
+\end{remark}
+% The direct implication of this proposition is easy as we will argue. The converse relies on the
+% following lemma:
+% \begin{lemma}
+%   \label{l:lkan-preserve}
+%   Let $F: A \rightarrow \Set$ be a functor such that
+%   its left Kan extension along yonedas preserve limits over diagrams on a
+%   category $D$.
+%   Then, for any diagram $K : D\rightarrow A$,
+%   the canonical morphism
+%   $\int^a F(a)\times Cone(a,K) \rightarrow \lim (FK)$ is an isomorphism, 
+% where $Cone(a,K)$ is the set of
+%   cones for $K$ with tip $a$. As an easy consequence,
+%   $F$ also preserves $\lambda$-small limits.
+% \end{lemma}
+% \begin{remark}
+%   With Proposition~\ref{prop:flat-functor} in mind, this means that any
+%   $\lambda$-filtered colimit of representables presheaves preserve
+%   $\lambda$-small limits.
+%   The converse is not true. Otherwise, 
+%   it would imply that a presheaf preserves $\lambda$-small limits if and only if
+%   it a $\lambda$-directed colimit of representable presheaves, and thus,
+%   anticipating some furhter theorem TODO, accessible categories would be the
+%   same as presentable categories.
+% \end{remark}
+% \begin{proof}[Proof of Lemma~\ref{l:lkan-preserve}]
+  
+  Recall that $\Lan_yF(K) = \int^a F(a)\times K(a)$.
+ We are sloppy and use equality where isomorphism would be more appropriate.
+
+  Let $K : D \rightarrow A$.
+  Then, $\lim F K = \int_d F(K(d)) = \int_d\int^a F(a)\times  A(a, K(d)) =
+  \int_d \Lan_yF( A(-, K(d)))$ which by hypothesis is
+  $ \Lan_yF(\int_dA(-,K(d)))=\int^a F(a)\times \int_dA(a, K(d))$.
+  To conclude,
+  $\int_dA(a,K(d))$ is the set of natural transformations between
+  $a$ (as a constant functor) and $K$: that is, it is the set of cones.
+% \end{proof}
+% \begin{remark}
+%   \label{r:lkan-preserve-cocone}
+%   Let $F: A \rightarrow \Set$ be a functor such that
+%   its left Kan extension along yonedas preserve limits over diagrams on a
+%   category $D$. 
+%   Then, for any diagram $K : D\rightarrow A$,
+%   Lemma~\ref{l:lkan-preserve-cocone} implies that given any
+%   element $x\in\lim FK$, there exists a $K$-cone in $A$ with tip $a$ and an
+%   element $y\in F(a)$ such that $x$ is the image of $y$ by the universal arrow
+%   into $\lim FK$.
+% \end{remark}
+\begin{proof}[Proof of Proposition~\ref{prop:flat-functor}]
+It is clear that if $(\int F)^o$ is $\lambda$-filtered then the left Kan extension preserves
+$\lambda$-small limits, because $F$ is a colimit over $(\int F)^o$, and
+$\lambda$-small limits commute with $\lambda$-directed colimits in $\Set$.
+Let us prove the converse and suppose that the left Kan extension preserve
+$\lambda$-small limits of representable presheaves.
+We show that any $\lambda$-small diagram in $\int F$ has a cone.
+  
+ By universal property of $\int F$ as the comma category $1/F$, for any category
+ $D$, a functor $D \rightarrow \int F$ is equivalently given by:
+ \begin{itemize}
+ \item a functor $K : D  \rightarrow A$,
+   \item and an object $\alpha\in \hom(1,FK))$.
+ \end{itemize}
+ Note that $\hom(1,FK) = \lim (FK)$. We are going to show that if the left
+ Kan extension of $F$ preserves $D$-shaped limits, then $\lim(FK)$
+ is canonically isomorphic to
+ $\int^a F(a)\times Cone (a, K)$, where $Cone(a, K)$ is the set of cones for $K$
+ with tip $a$.
+Then, any antecedent of $\alpha$ through the surjection 
+$\amalg_a F(a)\times Cone (a, K) \rightarrow \int^a F(a)\times Cone (a, K)$
+provides a suitable cone.
+
+Recall that $\Lan_yF(K) = \int^a F(a)\times K(a)$.
+We are sloppy and use equality where isomorphism would be more appropriate.
+Now, $\lim F K = \int_d F(K(d)) = \int_d\int^a F(a)\times  A(a, K(d)) =
+\int_d \Lan_yF( A(-, K(d)))$ which by hypothesis is
+$$ \Lan_yF(\int_dA(-,K(d)))=\int^a F(a)\times \int_dA(a, K(d)).$$
+To conclude,
+$\int_dA(a,K(d))$ is the set of natural transformations between
+$a$ (as a constant functor) and $K$: that is, it is the set of cones.
+% This provides the required cone.
+
+% $\hom(D \rightarrow 1 \xrightarrow{F}{} \hat{A}, A \rightarrow{\hat{A}})$,
+% where this hom category is computed in the $2$-slice category over $\hat{A}$.
+% More precisely, 
+ % defined as follows:
+ % \begin{itemize}
+ % \item objects are functors $K : D  \rightarrow A$ equipped with a
+ %   an object $\alpha\in \lim FK (= \hom(1,FK))$
+ %   (that is, by Lemma~\ref{l:lkan-preserve}, an element of $\int^a F(a)\times Cone (a, K)$);
+ %   % a natural transformations $\alpha : 1 \Rightarrow FK$ (that is, an element in
+ %   % the $\Set$-limit of $FK$);
+ %   \item a morphism between $(K, \alpha)$ and $(K',\alpha')$ is a natural
+ %     transformation $\beta : K \Rightarrow K'$ such that
+ %     $\alpha' = \lim (F\beta) (\alpha)$.
+ %     % \circ
+ %     % \beta F$.
+ % \end{itemize}
+
+ % Let us fix the functor $K$. To give a diagram in $\int F$, the missing part is
+ % al element $\alpha\in \lim FK$.
+
+ % Next, a cone on a category $D$ in a category $C$ is given by a diagram
+ % \begin{tikzcd}
+ %   D \ar[r, bend  left=60, "c"{name=U}]
+ %   \ar[r, bend right=60, "J"{name=D,below}]
+ %   & C \ar[Rightarrow, from=U, to=D, % "\varphi" description
+ %   ]
+ % \end{tikzcd}
+ % where $J$ is the diagram and $c$ is a constant functor induced by an object $c$.
+
+ % In the case above where $C = \int F$, a cone is given by:
+ % \begin{itemize}
+ % \item an object $a'$  of $A$ with an element $x\in F(a')$
+ % \item a functor $K : D \rightarrow A$;
+ %   \item an element $\alpha \in \int^a F(a)\times Cone(a, K)$;
+ %       \item a natural transformation $\beta : K \rightarrow a'$, that is, an
+ %         element of $Cocone(K, a')$;
+ %       \item such that the image of $\alpha$ by $\int^a F(a)\times Cone(a, K) \xrightarrow{\beta}{}
+ %         \int^a F(a)\times A(a, a')^D = F(a')^D$ is the diagonal uplet
+ %         consisting of $x$.
+ % \end{itemize}
+\end{proof}
+\begin{remark}
+ The 
+ proof of Proposition~\ref{prop:flat-functor}
+ does not constructively provide a cone, as it requires to choose an
+ antecedent of some element by a surjective function.
+\end{remark}
+
+There is an alternative definition of accessible categories as free cocompletions.
+In the following, $A$ denotes a small category.
+\begin{definition}
+  Let $U_{\Dir\lambda}$ denotes the forgetful functor from 
+  categories with $\lambda$-directed colimits and functors preserving them to
+  the category of small categories.
+  We denote $\Dir\lambda(A)$ the full subcategory of $\hat{A}$ consisting of
+  $\lambda$-directed colimits of representables presheaves.
+\end{definition}
+\section{Gabriel-Ulmer}
+What is the category of algebras for the monad $\Pres\lambda\circ\Cont\lambda$?
+
+  \section{Presentable categories (old version)}
   Let $\lambda$ be a regular cardinal.
   \begin{definition}
   A $\lambda$-presentable category is a
   category $C$ which is a free $\lambda$-cocompletion
   $\Cont\lambda(\Pres\lambda(C))$ of
   some small full subcategory $\Pres\lambda(C)$
-     \cite[Representation theorem 1.46]{adamek_rosicky}..
+     \cite[Representation theorem 1.46]{adamek_rosicky}.
 	  Then, $\Pres\lambda(C)$ consist of \emph{$\lambda$-presentableobjects}
   \end{definition}
 
@@ -151,27 +1472,58 @@ chains for $\omega$-filtered colimits, although there is no cofinality argument
 	  This is obviously the left adjoint to the inclusion functor
 	  (indeed, any cocontinuous functor out of $\hat{A}$ has a left adjoint, using yoneda to get the value of it)
   \end{remark}
+  \begin{remark}
+	  The remark after
+     \cite[Representation theorem 1.46]{adamek_rosicky} says that a $\lambda$-presentable
+	  category $K$ is equivalent to $\Cont\lambda(\Pres\lambda(K))$.
+  \end{remark}
+  \begin{remark}
+	  I suspect that $A$ consists of presentable objects in $\Cont\lambda(A)$, but it can be less that all of them.
+  \end{remark}
 
   Compare with the characterization of $\lambda$-accessible category:
   \begin{definition}
-  A $\lambda$-accessible category is a cocompletion of some small full subcategory with respect to $\lambda$-directed colimits
+	  A $\lambda$-accessible category is a cocompletion $\Dir\lambda(A)$ of some small full subcategory $A$ with respect to $\lambda$-directed colimits
   \cite[Representation theorem 2.26]{adamek_rosicky}. 
   % Equivalently, it is a category which is equivalent to a subcategory of
   % functors from some small category $\CC$ to $\Set$ preserving
   % colimits and $\lambda$-small limits.
   \end{definition}
-  Here, we think of an
-  adjunction between categories and categories with $\lambda$-directed colimits
-  and functors preserving them.
-  The free stuff is obtained by restricting the category of presheaves to $\lambda$-directed colimits of yoneds.
+  Here, we think of the forgetful functor from categories with $\lambda$-directed colimits and functors preserving them to the category of categories as the right adjoint functor.
+  The free stuff is obtained by restricting the category of presheaves to $\lambda$-directed colimits of yonedas.
   \begin{question}
    Is it clear that a $\lambda$-presentable category is $\lambda$-accessible
    with these characterizations? Not really...
+	  I think the key point is to identify the requirements on $A$ to have $\Dir\lambda(A) = 
+	  \Cont\lambda(A)$.
+  \end{question}
+  \begin{remark}
+	  It is clear that $\lambda$-directed colimits of yonedas preserve $\lambda$-small colimits
+	  (because $\lambda$-small limits commute with $\lambda$-directed colimits in $\Set$),
+	  so $\Dir\lambda(A)\subset \Cont\lambda(A)$.
+	  So I guess, we can always extend a $\lambda$-accessible category with the other presheaves that preserves small limits, and then we get a $\lambda$-presentable category.
+  \end{remark}
+  \begin{remark}
+	  The first remark following
+  \cite[Representation theorem 2.26]{adamek_rosicky} says that given a $\lambda$-accessible category
+	  $K$, we have $K = \Dir\lambda(\Pres\lambda(K))$.
+  \end{remark}
+  \begin{question}
+	   As $\lambda$-accessibility differs from $\lambda$-presentability, it is not always the case that 
+	   $(K =) \Cont\lambda(A)=\Dir\lambda(A)$. But as any presentable category is accessible, there exists $B$ such that $K = \Dir\lambda(B)$. And after the previous remarks, we know that we can choose $B = \Pres\lambda(K)$. And then, $\Cont\lambda(B) = \Dir\lambda(B)$.
+	   In other words, $\Cont\lambda = 
+	   \Dir\lambda \circ \Pres\lambda \circ \Cont\lambda$.
+	   We also know that $\Cont\lambda\circ\Pres\lambda\Cont\lambda = \Cont\lambda$
+	   and similarly for $\Dir\lambda$.
+
+	   What is this $B$ with respect to $A$?
+	   More precisely, what does $\Pres\lambda(\Cont\lambda(A))$ do ?
+	   Maybe a $\lambda$-small completion??
+	   In fact, what can we say about $\Pres\lambda(K)$, for $K$ $\lambda$-accessible or presentable? For presentability, thinking of the example of presheaves, where presentable objects are finite colimits of yonedas, we might guess that $\Pres\lambda(\Cont\lambda(A))$ or $\Pres\lambda(\Dir\lambda(A))$ is the category of $\lambda$-small colimits of elements of $A$ (one should be this one, and the other is then different otherwise every accessible category would be presentable).
+	   We may guess that $\Pres\lambda\circ\Dir\lambda(A)$ is smaller that $\Pres\lambda\circ\Cont\lambda(A)$, because $\Dir\lambda(A) \subset \Cont\lambda(A)$, but I am not sure. Is $\Pres\lambda$ monotonous?
+	   I think this relates to Gabriel-Ulmer duality!! In fact $\Pres\lambda(K)$ is always small-complete when $K$ is $\lambda$-presentable. But how does it fit with finite colimits of yonedas in the case of presheaves? Oh yes, it makes sense now.. Is there Gabriel-Ulmer duality for accessible categories?
   \end{question}
   Alternative and (not)
-  \begin{definition}
-    
-  \end{definition}
 
   \begin{definition}
     A \textbf{$\lambda$-presentable object} in a category $C$ is an object such
@@ -384,6 +1736,47 @@ Con$ (this is the idea of translating GATs into EATS, as in \cite{CARTMELL}).
   Maybe this generalizes to HIITs and HITs?
 \end{question}
 \section{Equational systems?}
+\appendix
+\section{Some useful categorical results}
+\begin{lemma}
+  \label{l:reflect-cocomplete}
+  A reflective subcategory of a cocomplete category is cocomplete. 
+\end{lemma}
+\begin{proof}
+  Take the colimit in the cocomplete category, and apply the left adjoint.
+\end{proof}
+As already mentioned, a colimit in the full subcategory does not coincide with the
+one computed in the total category unless the latter is essentially in the subcategory.
+\begin{proposition}
+ In $\Set$, $\lambda$-filtered colimits are exactly those commuting with any $\lambda$-small limit.
+\end{proposition}
+\begin{lemma}
+\label{l:cocontinuous-lkan}
+ Let $A$  be a small category, $C$ be full subcategory of $\hat{A}$
+ containing representable presheaves, and $B$ be a cocomplete category.
+ Then the left Kan extension of any functor $F : A\rightarrow B$ along the
+ yoneda embedding into $C$ maps a presheaf $G$ to the coend $\int^a F(a)\times
+ G(a)$.
+ In particular, it is cocontinuous.
+\end{lemma}
+\begin{proof}
+ Obvious when unfolding the coend formula of left Kan extension. 
+\end{proof}
+\begin{lemma}
+  \label{l:unique-cocontinuous-lkan}
+  Let $A$  be a small category, $C$ be a reflective subcategory of $\hat{A}$
+  containing representable presheaves, and $B$ be a cocomplete category.
+  Then the left Kan extension of any functor $F : A\rightarrow B$ along the
+  yoneda embedding into $C$ is the unique cocontinuous functor which
+  postcomposed with the yoneda embedding yields $F$.
+\end{lemma}
+\begin{proof}
+  Suppose you have two such functors $F$ and $F'$ and let us denote $L$ the left
+  adjoint to the embedding of $C$ in $\hat{A}$. 
+  As $\hat{A}$ is the free cocompletion, $F\circ L = F'\circ L$. But then, by
+  precomposing with the full and faithful embedding $R$ and exploiting the fact
+  that $L\circ R$ is isomorphic to the identity, we get the desired result.
+\end{proof}
 \bibliographystyle{unsrt}
 \bibliography{bibli}
 \end{document}
