@@ -470,6 +470,9 @@ In fact, we prove a stronger result:
 \end{proof}
 
 \section{Doctrines}
+\textcolor{red}{Il y a un truc a faire avec les foncteurs familiaux!! qui
+  preservent presque les limites connectees, mais pas toutes. Pourtant il y a
+  toujours une histoire de coproduits, qui est le dual des limites connectees.}
 \textcolor{red}{avec l'histoire des sketches, va falloir reflechir a pourquoi on
   peut toujours se ramener a $\mathcal{S}$ l'ensembles des categories $\lambda$-petites}
 \begin{definition}
@@ -490,6 +493,29 @@ In fact, we prove a stronger result:
  If $Z(C\bot D) = [C\times D, \Set]$, then we say that the pole is
  \textbf{maximal} and that $C$-colimits commute with $D$-limits.
 \end{definition}
+\begin{remark}
+  $F : C \times D \rightarrow \Set$ is in $Z(C\bot D)$ is equivalent to the
+  preservation by $\Lan_y 1 : [C,\Set] \rightarrow \Set$ of the limit of the diagram
+  $D \rightarrow [C, \Set]$ induced by $F$.
+  Consequently, $C$-colimits commute with $D$-limits if $\Lan_y 1$ is $D$-continuous.
+\end{remark}
+\begin{remark}
+  \begin{align*}
+    \Lan_yF(G)=\Lan_yG(F) &&\\ 
+    \Lan_{y_{\int F}} 1(G) = \Lan_y F(G) &&\text{\qquad if $G$ factors through the
+      forgetful functor $\int F \rightarrow C$.}
+    \end{align*}
+    The last equality is the content of elimination of weights.
+    In fact, $\Lan_y F(G)$ is the $G$-weighted colimit of $F$ (and reciprocally).
+\end{remark}
+\begin{definition}
+ Let $F : C \rightarrow \Set$ be a presheaf. A \textbf{dependent $F$-weighted
+   colimit} is a colimit of a functor $G: (\int F)^o \rightarrow F$.
+\end{definition}
+\begin{remark}
+ Thanks to the reduction of weights, $F$-weighted colimits are particular cases
+ of dependent ones.
+\end{remark}
 % \begin{definition}
 %   Given two small categories $C$ and $D$, we say that $C$-colimits commute
 %   over $D$-limits if $Z(C\bot D) = [C\times D, \Set]$, that is, for any functor $F:C\times D \rightarrow \Set$, the
@@ -518,32 +544,32 @@ In fact, we prove a stronger result:
 \begin{remark}
 $\mathcal{S}^\bot$ is closed under finite products.
 \end{remark}
-\begin{definition}
-  A doctrine $\mathcal{S}$ is 
-  \textbf{delightful} if, given any presheaf $F:C\rightarrow \Set$
-  $D \in \mathcal{S}$, if functors of the shape $(\int F)^o \times D \rightarrow C^o
-  \times D \rightarrow \Set$ are in $Z((\int F)^o \bot D)$, then 
-  $Z((\int F)^o \bot D)$ is maximal.
-\end{definition}
-\begin{remark}
-  In other words, a doctrine $\mathcal{S}$ is deligthful if,
-  for $(\int F)^o$ to be in $\mathcal{S}^\bot$, it is enough that
-  for any functor
-  $H:(\int F)^o \times D \rightarrow \Set$ with $D \in \mathcal{S}$, the 
-  canonical morphism
-  \[
-    \int^{(c,x): \int F} \int_d H(c,d) \rightarrow
-    \int_d \int^{(c,x): \int F}  H(c,d) 
-  \]
-  is an isomorphism.
-\end{remark}
-\begin{remark}
-  There is an equivalent definition of delightful doctrines which only
-  talks about poles of $F = y : C^o \times C \rightarrow \Set$,
-  because a coend is computed as a colimit over a twisted arrow category
-  (Item~\ref{it-coend-colims} of Corollary~\ref{cor:weighted-colims}), which is
-  a category of the shape $(\int y)^o$.
-\end{remark}
+% \begin{definition}
+%   A doctrine $\mathcal{S}$ is 
+%   \textbf{delightful} if, given any presheaf $F:C\rightarrow \Set$
+%   $D \in \mathcal{S}$, if functors of the shape $(\int F)^o \times D \rightarrow C^o
+%   \times D \rightarrow \Set$ are in $Z((\int F)^o \bot D)$, then 
+%   $Z((\int F)^o \bot D)$ is maximal.
+% \end{definition}
+% \begin{remark}
+%   In other words, a doctrine $\mathcal{S}$ is deligthful if,
+%   for $(\int F)^o$ to be in $\mathcal{S}^\bot$, it is enough that
+%   for any functor
+%   $H:(\int F)^o \times D \rightarrow \Set$ with $D \in \mathcal{S}$, the 
+%   canonical morphism
+%   \[
+%     \int^{(c,x): \int F} \int_d H(c,d) \rightarrow
+%     \int_d \int^{(c,x): \int F}  H(c,d) 
+%   \]
+%   is an isomorphism.
+% \end{remark}
+% \begin{remark}
+%   There is an equivalent definition of delightful doctrines which only
+%   talks about poles of $F = y : C^o \times C \rightarrow \Set$,
+%   because a coend is computed as a colimit over a twisted arrow category
+%   (Item~\ref{it-coend-colims} of Corollary~\ref{cor:weighted-colims}), which is
+%   a category of the shape $(\int y)^o$.
+% \end{remark}
 % \begin{lemma}
 %   A doctrine $\mathcal{S}$ is 
 %   {delightful} if and only if, given any category $C$,
@@ -577,13 +603,20 @@ $\mathcal{S}^\bot$ is closed under finite products.
     Let $y : C^o \times C \rightarrow \Set$ be the yoneda functor, with $C$ small.
 We have an easy chain of implications, for a presheaf $F : C \rightarrow \Set$:
 \begin{enumerate}
-\item $(\int F)^o \in \mathcal{S}^{\bot}$ (we say then that $F$ is \textbf{$\mathcal{S}$-flat}) \label{it-el-presheaves};
-\item $F$ is a $\mathcal{S}^{\bot}$-colimit of representable presheaves;
+\item $(\int F)^o \in \mathcal{S}^{\bot}$, that is,
+  dependent $F$-weighted colimits commute with $\mathcal{S}$-limits
+  (we then say that $F$ is \textbf{$\mathcal{S}$-flat}) \label{it-el-presheaves};
+\item $F$ is a $\mathcal{S}^{\bot}$-colimit of representable presheaves
+  (because it is a $F$-weighted colimit of representable presehaves);
 \item $\Lan_yF$ preserves any $\mathcal{S}$-shaped limits
+  ($F$-weighted colimits commute with $\mathcal{S}$-limits)
   \label{it-lan-preserves};
 \item $\Lan_yF$ preserves any $\mathcal{S}$-shaped limits of representable presheaves;
+  ($F$-weighted colimits commute with $\mathcal{S}$-limits of representable presheaves)
   \label{it-lan-preserves-rep}
-  \item $F$ preserves any $S$-shaped limits;
+  \item $F$ preserves any $S$-shaped limits
+    ($F$-weighted colimits commute with $\mathcal{S}$-limits of representable
+    presheaves which already exist in $C$).
     \label{it-F-preserves}
 \end{enumerate}
 Moreover, if $C$ is $\mathcal{S}$-complete, then
@@ -592,24 +625,41 @@ item~\ref{it-F-preserves} entails item~\ref{it-lan-preserves-rep}.
 \begin{proof}
  Straightforward using the coend formula for the left Kan extension. 
 \end{proof}
-\begin{remark}
+\begin{definition}
   Let $\mathcal{S}$ be a doctrine.
-  It is straightforward to check a doctrine is deligthful if and only if
+  It is \textbf{deligthful} if 
   item~\ref{it-lan-preserves} implies item~\ref{it-el-presheaves} 
-  in Lemma~\ref{l:flat-implications} (just unfold the definitions).
+  in Lemma~\ref{l:flat-implications}, i.e. for any presheaf $F$, if $F$-weighted
+  colimits commute with $\mathcal{S}$-limits, then so do any dependent $F$-weighted colimits.
   As a consequence, the first \ref{it-lan-preserves} items
   are logically equivalent.
-\end{remark}
+\end{definition}
 That is why a delightful doctrine is delightful.
-\cite{lack_accessible} proposes the subclass of sound doctrines
-(proved delightful by Lemma~\ref{l:sound-delightful}).
+\cite{lack_accessible} proposes the subclass of sound doctrines.
+% (proved delightful by Lemma~\ref{l:sound-delightful}).
 \begin{definition}
-  A doctrine $\mathcal{S}$ is \textbf{sound} \cite[Definition 2.2]{lack_accessible}
-  if, given any small categories $C$ and $D$, with $D \in \mathcal{S}$,
-  if the pole $Z(C \bot D)$ contains all the functors of the shape $C(S -,=)$, with $S :
-  D^o \rightarrow C$, then it is maximal.
-  % then $C \in \mathcal{S}^\bot$.
-  % $D \in \mathcal{S}$, if functors of the shape $(\int F)^o \times D \rightarrow C^o
+  A doctrine $\mathcal{S}$ is \textbf{sound for a collection of presheaves $F :
+    C \rightarrow \Set$}
+  % if
+  % A doctrine $\mathcal{S}$ is \textbf{sound}, if
+  if
+  item~\ref{it-lan-preserves-rep} in Lemma~\ref{l:flat-implications} entails
+  item~\ref{it-el-presheaves}, so that
+  all theses items up to item~\ref{it-el-presheaves} are
+  equivalent %~\cite[Theorem 2.4]{lack_accessible}
+  (and thus it is delightful).
+  In other words, if $F$-weighted colimits commute with $\mathcal{S}$-limits of
+  representable presheaves, then do so any dependent $F$-weighted colimits.
+
+  A doctrine is said \textbf{sound} if it is sound for the total collection of presheaves.
+  % A doctrine $\mathcal{S}$ is \textbf{sound} \cite[Definition 2.2]{lack_accessible}
+  % if, given any small categories $C$, % with $D \in \mathcal{S}$,
+  % if $C$-colimits commute $\mathcal{S}$-limits of representable presheaves, then $C$
+  % commutes with $\mathcal{S}$-limits.
+  % if the pole $Z(C \bot D)$ contains all the functors of the shape $C(S -,=)$, with $S :
+  % D^o \rightarrow C$, then it is maximal.
+  % % then $C \in \mathcal{S}^\bot$.
+  % % $D \in \mathcal{S}$, if functors of the shape $(\int F)^o \times D \rightarrow C^o
   % \times D \rightarrow \Set$ are in $Z(\int F \bot D)$, then 
   % in fact $Z(\int F \bot D) = [\int F\times D, \Set]$.
   % if, for a small category $C$ to be in $\mathcal{S}^\bot$,
@@ -625,17 +675,6 @@ That is why a delightful doctrine is delightful.
   % \]
   % is an isomorphism.
 \end{definition}
-\begin{remark}
-  Note that by yoneda, the codomain of the canonical 
-  \[
-    \int^{c: C} \int_d D(S c, d) \rightarrow
-    \int_d \int^{c}  D(S c, d) 
-  \]
-  is a singleton set.
-  As a colimit consists in taking the connected components of the category of elements,
-  another way to state soundness is that the category of cocones of any functor
-  $S : D \rightarrow C$ is connected.
-\end{remark}
 \begin{example}
   Here are some examples \cite[Example 2.3]{lack_accessible} of sound doctrines:
   \begin{itemize}
@@ -646,14 +685,42 @@ That is why a delightful doctrine is delightful.
   \item 
     $\mathcal{S} = \{ \text{finite connected categories} \}$, and then
     $\mathcal{S}^\bot$ is the collection of sifted categories;
-    \item (non-examples) the doctrine of countable products (i.e. countable
-      discrete categories) and the doctrine of pullbacks are not sound.
+  \item (non-examples) the doctrine of countable products (i.e. countable
+    discrete categories) and the doctrine of pullbacks are not sound.
   \end{itemize}
 \end{example}
+\begin{remark}
+ If a doctrine $\mathcal{S}$ is sound on terminal presheaves, % then \cite[Definition 2.2]{lack_accessible}
+ then, given any small category $C$, % with $D \in \mathcal{S}$,
+ if $C$-colimits commute $\mathcal{S}$-limits of representable presheaves, then $C$
+ commutes with $\mathcal{S}$-limits.
+
+  \label{r:sound-connected}
+  Note that by yoneda, the codomain of the canonical 
+  \[
+    \int^{c: C} \int_d C(S d, c) \rightarrow
+    \int_d \int^{c}  C(S d, c) 
+  \]
+  is a singleton set.
+  As a colimit consists in taking the connected components of the category of elements,
+  another way to state soundness is that the category of cocones of any functor
+  $S : D^o \rightarrow C$ is connected.
+  As a consequence \cite[Proposition 2.5]{lack_accessible}, any $\mathcal{S}^o$-cocomplete contegory $C$ is in
+  $\mathcal{S}^\bot$ (could also be deduced directly from $\int_d C( S d, c)
+  \simeq C(\int^d S d, c)$).
+\end{remark}
+% \begin{question}
+%  Why not require that the category of cones is connected? 
+% \end{question}
+In fact, any doctrine satisfying this property is sound.
 
 \begin{lemma}
   \label{l:sound-delightful}
-  Any sound doctrine $\mathcal{S}$ is delightful~\cite[Theorem 2.4]{lack_accessible}
+  If a doctrine $\mathcal{S}$ is sound on terminal presheaves, then
+%   item~\ref{it-lan-preserves-rep} in Lemma~\ref{l:flat-implications} entails
+% item~\ref{it-el-presheaves}, so that
+%   all theses items up to item~\ref{it-el-presheaves} are
+  it is sound~\cite[Theorem 2.4]{lack_accessible}.
 \end{lemma}
 \begin{proof}
   So we are given a presheaf $F:C\rightarrow \Set$ such that 
@@ -709,43 +776,60 @@ Now we can apply our hypothesis on $\int F$, which concludes the argument.
   
 \end{proof}
 \begin{remark}
-  By inspecting the proof above, we see that for sound doctrines,
-  item~\ref{it-lan-preserves-rep} implies the first one in
-  Lemma~\ref{l:flat-implications}. 
-  As a consequence, the first \ref{it-lan-preserves-rep} items
-  are logically equivalent.
+  In fact, Lemma~\ref{l:sound-delightuful} can be taken as a definition of sound
+  doctrines: if 
+  item~\ref{it-lan-preserves-rep} in Lemma~\ref{l:flat-implications} entails
+  item~\ref{it-el-presheaves}, then the doctrine is sound (consider the case of
+  $F$ as the terminal functor).
+  % By inspecting the proof above, we see that for sound doctrines,
+  % item~\ref{it-lan-preserves-rep} implies the first one in
+  % Lemma~\ref{l:flat-implications}. 
+  % As a consequence, the first \ref{it-lan-preserves-rep} items
+  % are logically equivalent.
 \end{remark}
-This leads to the following definition:
-\begin{definition}
-  A doctrine $\mathcal{S}$ is 
-  \textbf{strongly delightful} if, given any presheaf $F:C\rightarrow \Set$
-  $D \in \mathcal{S}$,
-  if the pole $Z((\int F)^o \bot D)$ contains all the functors of the shape
-   $(\int F)^o \times D \rightarrow C^o
-  \times D \xrightarrow{C(-, S =)}{} \Set$ for $S : D^o \rightarrow C$, then it is maximal.
-  % if functors of the shape $(\int F)^o \times D \rightarrow C^o
-  % \times D \rightarrow \Set$ are in $Z((\int F)^o \bot D)$,
-\end{definition}
-\begin{lemma}
-  We have an easy chain of implications:
-  \begin{enumerate}
-  \item $\mathcal{S}$ is sound;
-  \item $\mathcal{S}$ is strongly delightful;
-  \item $\mathcal{S}$ is delightful.
-  \end{enumerate}
-\end{lemma}
-\begin{question}
-  Could it be that if a doctrine is strongly delightful, then it is sound?
-\end{question}
-\begin{remark}
-  \label{r:strong-delight-car}
-  A doctrine is strongly delightful exactly when
-  item~\ref{it-lan-preserves-rep} in Lemma~\ref{l:flat-implications} entails the first one.
+% This leads to the following definition:
+% \begin{definition}
+%   A doctrine $\mathcal{S}$ is 
+%   \textbf{sound} if, given any presheaf $F:C\rightarrow \Set$
+%   $D \in \mathcal{S}$,
+%   if the pole $Z((\int F)^o \bot D)$ contains all the functors of the shape
+%    $(\int F)^o \times D \rightarrow C^o
+%   \times D \xrightarrow{C(-, S =)}{} \Set$ for $S : D^o \rightarrow C$, then it is maximal.
+%   % if functors of the shape $(\int F)^o \times D \rightarrow C^o
+%   % \times D \rightarrow \Set$ are in $Z((\int F)^o \bot D)$,
+% \end{definition}
+% \begin{lemma}
+%   We have an easy chain of implications:
+%   \begin{enumerate}
+%   \item $\mathcal{S}$ is sound;
+%   \item $\mathcal{S}$ is sound;
+%   \item $\mathcal{S}$ is delightful.
+%   \end{enumerate}
+% \end{lemma}
+% \begin{example}
+%  \cite[Remark 2.6]{lack_accessible} provides a simple example of a doctrine
+%  which is not sound, but such that item~\ref{it-lan-preserves-rep} entails
+%  item~\ref{it-lan-preserves} in case $C$ is $\mathcal{S}$-complete, in Lemma~\ref{l:flat-implications}: $\mathcal{S} = \{\leftarrow
+%  \rightarrow, \cdot\}.$
+% \end{example}
+% \begin{question}
+%   Is it an example of a sound doctrine which is not sound? 
+%   \textcolor{red}{N'est ce pas en contradiction avec \cite[Remark 2.7]{lack_accessible}}
+% \end{question}
+% \begin{lemma}
+%  \cite[Remark 2.7]{lack_accessible} says that sound doctrine are exactly those
+%  for which item~\ref{it-lan-preserves-rep} entails
+%  item~\ref{it-lan-preserves}, even when $C$ is not $\mathcal{S}$-complete!
+% \end{lemma}
+% \begin{remark}
+%   \label{r:strong-delight-car}
+%   A doctrine is sound exactly when
+%   item~\ref{it-lan-preserves-rep} in Lemma~\ref{l:flat-implications} entails the first one.
 
-  Thus, in this case, given a small category $C$ with $\mathcal{S}$-shaped limits, a presheaf
-  $C \rightarrow \Set$ preserves $\mathcal{S}$-shaped limits if and only it is a
-  $\mathcal{S}^\bot$-shaped colimit of representable presheaves.
-\end{remark}
+%   Thus, in this case, given a small category $C$ with $\mathcal{S}$-shaped limits, a presheaf
+%   $C \rightarrow \Set$ preserves $\mathcal{S}$-shaped limits if and only it is a
+%   $\mathcal{S}^\bot$-shaped colimit of representable presheaves.
+% \end{remark}
 \begin{conjecture}
   Let $C$ be a small category and
   $\mathcal{S}$ be a doctrine.
@@ -786,14 +870,14 @@ What happens to $\Cont{\mathcal{S}}(C)$ if $\mathcal{S}$ is not small?
   $\Dir{\mathcal{S}^\bot}(C)$  is a full subcategory of $\Cont{\mathcal{S}}(C)$.
 \end{remark}
 \begin{lemma}
-  If $\mathcal{S}$ is strongly delightful and $C$ is $\mathcal{S}$-complete, then
+  If $\mathcal{S}$ is sound and $C$ is $\mathcal{S}$-complete, then
   $\Dir{\mathcal{S}^\bot}(C)$ is equivalent to $\Cont{\mathcal{S}}(C)$.
 \end{lemma}
 \begin{proof}
   By Remark~\ref{r:strong-delight-car}.
 \end{proof}
 \begin{conjecture}
-  If $\mathcal{S}$ is strongly delightful and
+  If $\mathcal{S}$ is sound and
   $\Dir{\mathcal{S}^\bot}(C)$ is equivalent to $\Cont{\mathcal{S}}(C)$, then
   $C$ is $\mathcal{S}$-complete.
 \end{conjecture}
@@ -953,6 +1037,50 @@ What happens to $\Cont{\mathcal{S}}(C)$ if $\mathcal{S}$ is not small?
   \end{conjecture}
   \begin{proof}
   \end{proof}
+  \begin{definition}
+    A $\mathcal{S}$-presentable category is a category $\mathcal{C}$ such that any object
+    is a $\mathcal{S}^\bot$-colimit of objects of $\Pres{\mathcal{S}^\bot}(\mathcal{C})$, and
+    $\Pres{\mathcal{S}^\bot}(\mathcal{C})$ is essentially small.
+  \end{definition}
+  \begin{conjecture}
+    Any category is $\mathcal{S}$-presentable if and only if it is equivalent to some
+    $\Cont{\mathcal{S}}(C)$ with $C$ small.
+  \end{conjecture}
+  \begin{conjecture}[Gabriel-Ulmer] 
+    There is a 2-equivalence between $\mathcal{S}$-complete categories and 
+    $\mathcal{S}$-presentable category (through $\Pres{\mathcal{S}^\bot}$ and $\Cont{\mathcal{S}}$).
+  \end{conjecture}
+  \begin{conjecture}
+    If $\mathcal{C}$ is $\mathcal{S}$-presentable and $\mathcal{S}$ is sound and
+    closed under opposite,
+    then $\Pres{\mathcal{S}^\bot}(\mathcal{C})$ is
+    $\mathcal{S}^o$-cocomplete, and thus is in $\mathcal{S}^\bot$, by Remark~\ref{r:sound-connected}.
+  \end{conjecture}
+  \section{Stuff about presentable categories}
+  \begin{lemma}
+    Given a $\lambda$-presentable category $\mathcal{C}$, there exists
+    $\mu>\lambda$ such that $\Pres\mu(\mathcal{C})$ is stable per subobjects
+  \end{lemma}
+  \begin{proof}
+   Take the closure of $\Pres\lambda(\mathcal{C})$ under subobjects (which is
+   still a set). As any
+   object is compact in a presentable category, we can take $\mu$ to be such
+   that any object in this closure is $\mu$-compact.
+  \end{proof}
+  \begin{example}
+    To find an example of a $\Pres\lambda(\mathcal{C})$ not closed under
+    subobjects, it is enough to find a small category $C$ such that some
+    subobject of a representable presheaf (that is, some sieve) is not a finite
+    colimit of representable presheaves. For example, consider the chain
+    category with a terminal object adjoined, and consider the functor to set
+    mapping any object to 1, except the terminal object which is mapped to 0.
+    This is a sieve, but, it is not a finite colimit of representable presheaves.
+  \end{example}
+  \begin{conjecture}
+    If $C$ is a small category and $\mathcal{C}$ is $\lambda$-presentable, then
+    so is $[C, \mathcal{C}]$.
+  \end{conjecture}
+   
 \section{Presentable categories (old new attempt)}
 
 Let $\lambda$ be a regular cardinal.
@@ -1199,6 +1327,52 @@ Definition~\ref{d:pres-strong-gen}.
 \end{proof}
 
 
+\subsection{Fun facts about orthogonal factorization systems}
+In fact, orthogonal factorization systems are particular weak factorization
+systems (at least if the category has pushouts)! They are such that the cofibrations are closed under a certain
+pushout construction (and there is probably a dual statement for fibrations).
+
+% \begin{lemma}
+%  If a morphism is epimorphic, then there exists at most one filling for a square
+%  where it is on the left.
+% \end{lemma}
+% \begin{lemma}
+%   If a cocone consists of jointly epimorphic morphisms (in particular, if one of
+%   the morphism is epimorphic), then the universal morphism from the colimit is epimorphic.
+% \end{lemma}
+% \begin{corollary}
+% \end{corollary}
+\begin{lemma}
+  Let $f:A \rightarrow B$  be a morphism. Consider the universal morphism $B+_A B
+  \rightarrow B$ (through the cocone consisting of identities), and a morphism
+  $g : C \rightarrow D$.
+  A commutative square
+  \[
+    \xymatrix{
+      B+_A B \ar[r]\ar[d] & C \ar[d]^{g} \\
+      B \ar[r]& D
+    }
+  \]
+  % (which has at most one filling by the previous lemmas)
+  is equivalently given by (where $g:C\rightarrow D$ is considered as given) two
+  fillings of a commutative square
+  \[
+    \xymatrix{
+      A \ar[r]\ar[d]_f & C \ar[d]^{g} \\
+      B \ar[r]& D
+    }
+  \]
+  % \begin{itemize}
+  % % \item two morphisms $u_1,u_2:B \rightarrow C$ such that
+  % %   \item $u_1 \circ f = u_2 \circ f$;
+  % %   \item and  $g \circ u_1  = g\circ u_2 $ (which is the bottom arrow)
+  %  % \item a morphism $v : B \rightarrow D$;
+  %  %   \item such that $g \circ u_i  = v $
+  % \end{itemize}
+  A filling is then a witness that the two fillings are equal.
+\end{lemma}
+Thus, an factorization system which is closed under these codiagonals
+is an orthogonal factorization system.
 \section{Accessible categories}
 We have already introduced accessible categories in Definition~\ref{d:accessible}.
 \begin{question}
