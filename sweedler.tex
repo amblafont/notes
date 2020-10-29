@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{tikz-cd}
+\tikzset{%
+  symbol/.style={%
+    draw=none,
+    every to/.append style={%
+      edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+  }
+}
+
+\begin{document}
+\[
+  \begin{tikzcd}[row sep = 7em, column sep = 8em]
+    Mon(Set)
+    \ar[r, shift left = 10,""{name=A, below}] 
+    \ar[rd, end anchor = north west, shift right = 2,""{name=B4, above}] 
+    \ar[r, shift right = 4,""{name=C, above}, dashed, "?"{below}] &
+    Cof
+    \ar[l, hook, shift right = 6, "C\mapsto \prod_c c/C\times -"{name=D, below}, ""{name=B,above}] \ar[from=A, to=B, symbol=\dashv]
+    \ar[r, hook, shift left = 2,"C \mapsto \amalg_c -^{c/C}",""{name=A2, below}]
+    \ar[d, shift left = 2, ""{name=B5, below}] 
+    &
+    Comon^o(Set)
+    \ar[l,shift left = 2,""{name=B2,above}]
+    \ar[from=A2, to=B2, symbol=\dashv]
+    \ar[dl,end anchor = north east, shift left = 2,""{name=B3,above}]
+    \\
+    &
+    Monoids
+    \ar[lu,hook, start anchor =north west,shift right = 2,sloped, "M\mapsto M\times -" ,""{name=A4, below}] 
+    \ar[ru,hook, start anchor = north east, shift left = 2, sloped,  "M\mapsto -^M" ,""{name=A3, below}] 
+    \ar[u,hook, shift left = 2, ""{name=A5, below}] 
+    \ar[from=A3, to=B3, symbol=\dashv]
+    \ar[from=A4, to=B4, symbol=\dashv]
+    \ar[from=A5, to=B5, symbol=\dashv]
+    \ar[from=D, to=C, symbol=\dashv]
+  \end{tikzcd}
+\]
+\end{document}
