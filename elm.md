@@ -11,3 +11,5 @@ https://medium.com/@_rchaves_/elm-how-to-use-decoders-for-ports-how-to-not-use-d
 
 - You cannot access the field of a js object. This is in particular a shame when trying to get the mouse relative position in an element. OffsetX/Y are relative to any sub-element that the mouse is over, but using the field currentTarget,
 the relative position could be given. Unfortunately, this is not possible.
+
+- you cannot do itnegrated custom elements (the is argument 
